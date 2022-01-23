@@ -217,9 +217,9 @@ public class DUGraphicsConfig {
 	public DUGraphicsConfig() {
 		try {
 
-			glassFontStream = getClass().getResourceAsStream("/org/andreels/zhsi/resources/boeingGlass.otf");
+			glassFontStream = getClass().getResourceAsStream("/boeingGlass.otf");
 			glassFont = Font.createFont(Font.TRUETYPE_FONT, glassFontStream);
-			xraasFontStream = getClass().getResourceAsStream("/org/andreels/zhsi/resources/VT323-Regular.ttf");
+			xraasFontStream = getClass().getResourceAsStream("/VT323-Regular.ttf");
 			xraasFont = Font.createFont(Font.TRUETYPE_FONT, xraasFontStream);
 
 		} catch (IOException e) {

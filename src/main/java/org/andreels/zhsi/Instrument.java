@@ -47,7 +47,7 @@ import org.andreels.zhsi.xpdata.XPData;
 public class Instrument extends JFrame implements ComponentListener, KeyListener {
 
 	private static final long serialVersionUID = 1L;
-	private Image logo_image = Toolkit.getDefaultToolkit().getImage(getClass().getResource("ZHSI_logo.png"));
+	private Image logo_image = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ZHSI_logo.png"));
 	
 	ZHSIPreferences preferences;
 	ModelFactory model_instance;

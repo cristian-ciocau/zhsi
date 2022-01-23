@@ -59,7 +59,7 @@ import org.andreels.zhsi.xpdata.XPData;
 public class FlapGauge extends JFrame implements ComponentListener, KeyListener {
 
 	private static final long serialVersionUID = 1L;
-	private Image logo_image = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/org/andreels/zhsi/ZHSI_logo.png"));
+	private Image logo_image = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ZHSI_logo.png"));
 
 	private BufferedImage img_flapGauge_bg;
 	private BufferedImage img_L_needle;
@@ -240,9 +240,9 @@ public class FlapGauge extends JFrame implements ComponentListener, KeyListener 
 		;		
 		public flapGaugePanel(){
 			try {
-				img_flapGauge_bg = ImageIO.read(getClass().getResource("/org/andreels/zhsi/resources/gauges/img_flapGauge_bg.png"));
-				img_L_needle = ImageIO.read(getClass().getResource("/org/andreels/zhsi/resources/gauges/img_L_needle.png"));
-				img_R_needle = ImageIO.read(getClass().getResource("/org/andreels/zhsi/resources/gauges/img_R_needle.png"));
+				img_flapGauge_bg = ImageIO.read(getClass().getResource("/gauges/img_flapGauge_bg.png"));
+				img_L_needle = ImageIO.read(getClass().getResource("/gauges/img_L_needle.png"));
+				img_R_needle = ImageIO.read(getClass().getResource("/gauges/img_R_needle.png"));
 			}catch (Exception e) {
 				e.printStackTrace();
 			}

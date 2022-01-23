@@ -62,7 +62,7 @@ public class DisplayUnit extends JFrame implements ComponentListener, KeyListene
 
 	private static final long serialVersionUID = 1L;
 
-	private Image logo_image = Toolkit.getDefaultToolkit().getImage(getClass().getResource("ZHSI_logo.png"));
+	private Image logo_image = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ZHSI_logo.png"));
 	
 	JPanel display;
 	ZHSIPreferences preferences;

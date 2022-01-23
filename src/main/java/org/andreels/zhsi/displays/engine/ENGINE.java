@@ -79,8 +79,8 @@ public class ENGINE extends DUBaseClass {
 	public ENGINE(ModelFactory model_factory, String title, String pilot) {
 		super(model_factory, title, pilot);
 		try {
-			img_stab_trim_tape = ImageIO.read(getClass().getResource("/org/andreels/zhsi/resources/engine/img_stab_trim_tape.png"));
-			img_rudder_trim_tape = ImageIO.read(getClass().getResource("/org/andreels/zhsi/resources/engine/img_rudder_trim_tape.png"));
+			img_stab_trim_tape = ImageIO.read(getClass().getResource("/engine/img_stab_trim_tape.png"));
+			img_rudder_trim_tape = ImageIO.read(getClass().getResource("/engine/img_rudder_trim_tape.png"));
 		}catch (IOException e) {
 			e.printStackTrace();
 		}

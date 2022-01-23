@@ -50,16 +50,16 @@ public class ZHSI extends Application {
 		
 		primaryStage.setTitle("ZHSI " + version);
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(ZHSI.class.getResource("zhsifx.fxml"));
+		loader.setLocation(getClass().getResource("/zhsifx.fxml"));
 		AnchorPane mainPane = loader.load();
 		Scene mainScene = new Scene(mainPane, 800,600);
-		mainScene.getStylesheets().add(ZHSI.class.getResource("zhsifx.css").toExternalForm());
+		mainScene.getStylesheets().add(getClass().getResource("/zhsifx.css").toExternalForm());
 		ZHSIController controller = loader.getController();
 		controller.setStage(primaryStage);
 		controller.setVersion(version);
 		primaryStage.setScene(mainScene);
 		primaryStage.setResizable(true);
-		primaryStage.getIcons().add(new Image(ZHSI.class.getResourceAsStream("/org/andreels/zhsi/ZHSI_logo.png")));
+		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/ZHSI_logo.png")));
 		primaryStage.setOnCloseRequest(event -> {
 			controller.disconnect();
 			Platform.exit();

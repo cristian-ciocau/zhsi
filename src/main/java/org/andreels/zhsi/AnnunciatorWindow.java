@@ -68,8 +68,6 @@ import org.andreels.zhsi.resources.LoadResources;
 import org.andreels.zhsi.xpdata.XPData;
 import org.andreels.zhsi.xpdata.XPDataRepositry;
 
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
-
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
@@ -80,7 +78,7 @@ public class AnnunciatorWindow extends JFrame implements ComponentListener, KeyL
 	
 	private static AnnunciatorWindow instance = null;
 	
-	private Image logo_image = Toolkit.getDefaultToolkit().getImage(getClass().getResource("ZHSI_logo.png"));
+	private Image logo_image = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/ZHSI_logo.png"));
 	
 	ZHSIPreferences preferences;
 	LoadResources rs;
