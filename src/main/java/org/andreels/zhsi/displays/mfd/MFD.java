@@ -58,18 +58,13 @@ public class MFD extends DUBaseClass {
 
 	public void drawInstrument(Graphics2D g2) {
 		
-
 		if (this.xpd.power_on() && this.xpd.dc_standby_on()) {
 			
-			if(this.xpd.mfd_eng()) {
-
+			if (this.xpd.lowerdu_page() == 1 && this.xpd.lowerdu_page2() == 0) {
 				displayENG();
 			}
 			
-			
-
-			if(this.xpd.mfd_sys()) {
-			
+			if (this.xpd.lowerdu_page2() == 1) {		
 				displaySYS();
 			}		
 		}
@@ -104,7 +99,7 @@ public class MFD extends DUBaseClass {
 		//B PRESS
 		gc.drawText("" + (int)this.xpd.hyd_b_pressure(), 686, 833, 34, 0, 0, 0, "center", g2);
 		
-//		if(this.xpd.hyd_a_pressure() > 0 || this.xpd.hyd_a_pressure() > 0) {
+		if (this.xpd.brake_temp() == 1) {
 			
 			g2.scale(gc.scalex, gc.scaley);
 			g2.translate(536, 30);
@@ -177,7 +172,7 @@ public class MFD extends DUBaseClass {
 			}
 			
 			g2.setTransform(original_trans);
-						
+										
 			if (this.xpd.brake_temp_left_out() <= 4.91) {
 				gc.drawText("" + this.xpd.brake_temp_left_out(), 60, 575, 28, 0, 0, 0, "left", g2);
 			} else {
@@ -209,11 +204,18 @@ public class MFD extends DUBaseClass {
 				gc.drawText("" + this.xpd.brake_temp_right_out(), 965, 575, 28, 0, 0, 0, "left", g2);
 				g2.setColor(gc.color_markings);
 			}
+			
+			g2.setTransform(original_trans);
+			
+		}
+		
+		if (this.xpd.flight_control() == 1) {
 						
 			g2.scale(gc.scalex, gc.scaley);
 			g2.translate(536, 80);
 			g2.setColor(gc.color_markings);
 			g2.setStroke(new BasicStroke(4f));
+			
 			//ELEV
 			g2.drawLine(0, 530, 0, 760);
 			g2.drawLine(-12, 530, 12, 530);//top line
@@ -325,7 +327,7 @@ public class MFD extends DUBaseClass {
 			g2.fillPolygon(right_ail_x, right_ail_y, 3);
 					
 			g2.setTransform(original_trans);
-//		}		
+		}		
 	}
 
 	private void displayENG() {
@@ -368,11 +370,11 @@ public class MFD extends DUBaseClass {
 		g2.setFont(rs.glassFont.deriveFont(38f));
 		//if(this.xpd.eng1_n2() > 0f) {
 		if(this.xpd.eicas_ff1() || this.xpd.fuel_flow_used_show()) {
-			g2.drawString(gc.mfd_ff.format(this.xpd.fuel_flow1()), text_x - 180, text_y + 107);	
+			g2.drawString(gc.mfd_ff.format(this.xpd.fuel_flow_dspl_1()), text_x - 180, text_y + 107);	
 		}
 		//if(this.xpd.eng2_n2() > 0f) {
 		if(this.xpd.eicas_ff2() || this.xpd.fuel_flow_used_show()) {
-			g2.drawString(gc.mfd_ff.format(this.xpd.fuel_flow2()), text_x + 130, text_y + 107);
+			g2.drawString(gc.mfd_ff.format(this.xpd.fuel_flow_dspl_2()), text_x + 130, text_y + 107);
 		}
 		g2.setTransform(original_trans);
 		
@@ -405,35 +407,32 @@ public class MFD extends DUBaseClass {
 		
 				
 		g2.setTransform(original_trans);
-		if(this.xpd.eng_oil_press_1() <= 13) {
-			g2.setColor(gc.color_red);
-		}else if (this.xpd.eng_oil_press_1() > 13 && this.xpd.eng_oil_press_1() <= 22) {
-			g2.setColor(gc.color_amber);
-		}else {
+		//if(this.xpd.eng_oil_press_1() <= 13) {
+		//	g2.setColor(gc.color_red);
+		//}else if (this.xpd.eng_oil_press_1() > 13 && this.xpd.eng_oil_press_1() <= 22) {
+		//	g2.setColor(gc.color_amber);
+		//}else {
 			g2.setColor(gc.color_markings);
-		}
+		//}
 		// if(this.xpd.eng_oil_press_1() > 0f) {
 		if(this.xpd.eicas_oil_press1()) {
 			gc.drawText(gc.mfd_oil_press.format(this.xpd.eng_oil_press_1()), 335, 555, 30, 0, 0, 0, "right", g2);
 		}
 		
 		
-		if(this.xpd.eng_oil_press_2() <= 13) {
-			g2.setColor(gc.color_red);
-		}else if (this.xpd.eng_oil_press_2() > 13 && this.xpd.eng_oil_press_2() <= 22) {
-			g2.setColor(gc.color_amber);
-		}else {
-			g2.setColor(gc.color_markings);
-		}
+		//if(this.xpd.eng_oil_press_2() <= 13) {
+		//	g2.setColor(gc.color_red);
+		//}else if (this.xpd.eng_oil_press_2() > 13 && this.xpd.eng_oil_press_2() <= 22) {
+		//	g2.setColor(gc.color_amber);
+		//}else {
+		//	g2.setColor(gc.color_markings);
+		//}
 		// if(this.xpd.eng_oil_press_2() > 0f) {
 		if(this.xpd.eicas_oil_press2()) {
 			gc.drawText(gc.mfd_oil_press.format(this.xpd.eng_oil_press_2()), 620, 555, 30, 0, 0, 0, "right", g2);
 		}
 		
 		
-
-		
-
 		//oil temp
 		int oil_temp1_ydelta = (int) (110 * (this.xpd.oil_temp_c_1() / 155));
 		int oil_temp2_ydelta = (int) (110 * (this.xpd.oil_temp_c_2() / 155));
@@ -545,8 +544,8 @@ public class MFD extends DUBaseClass {
 		g2.scale(gc.scalex, gc.scaley);
 		g2.setColor(gc.color_amber);
 		//oil press
-		g2.drawLine(text_x - 75, text_y + 275, text_x - 65, text_y + 275);
-		g2.drawLine(text_x + 100, text_y + 275, text_x + 110, text_y + 275);
+		//g2.drawLine(text_x - 75, text_y + 275, text_x - 65, text_y + 275);
+		//g2.drawLine(text_x + 100, text_y + 275, text_x + 110, text_y + 275);
 		//oil temp
 		g2.drawLine(text_x - 75, text_y + 360, text_x - 65, text_y + 360);
 		g2.drawLine(text_x + 100, text_y + 360, text_x + 110, text_y + 360);

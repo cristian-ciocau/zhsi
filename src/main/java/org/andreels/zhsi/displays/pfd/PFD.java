@@ -1407,11 +1407,13 @@ public class PFD extends DUBaseClass {
 		g2.setClip(original_clipshape);
 
 		g2.setColor(Color.WHITE);
-		if (this.xpd.airspeed_mach() >= 0.4f) {
-			gc.drawText("" + gc.mach_format.format(this.xpd.airspeed_mach()), 45, 85, 44, 0, 0, 0, "left", g2);
-		} else {
-			gc.drawText("GS", 25, 85, 24, 0, 0, 0, "left", g2);
-			gc.drawText("" + gc.df3hash.format(this.xpd.groundspeed()), 135, 85, 44, 0, 0, 0, "right", g2);
+		if (this.xpd.gs_on_pfd() == 1) {
+			if (this.xpd.airspeed_mach() >= 0.4f) {
+				gc.drawText("" + gc.mach_format.format(this.xpd.airspeed_mach()), 45, 85, 44, 0, 0, 0, "left", g2);
+			} else {
+				gc.drawText("GS", 25, 85, 24, 0, 0, 0, "left", g2);
+				gc.drawText("" + gc.df3hash.format(this.xpd.groundspeed()), 135, 85, 44, 0, 0, 0, "right", g2);
+			}
 		}
 		
 		if ((airspeed_mach_prev >= 0.4f && this.xpd.airspeed_mach() < 0.4f) || (airspeed_mach_prev < 0.4f && this.xpd.airspeed_mach() >= 0.4f)) {

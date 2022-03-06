@@ -59,6 +59,11 @@ public class Systems extends BaseDataClass {
 	private final String REVERSER_DEPLOY = "sim/flightmodel2/engines/thrust_reverser_deploy_ratio";
 	private final String SIM_PAUSED = "sim/time/paused";
 	private final String REL_GLS = "sim/operation/failures/rel_gls";
+	private final String FLIGHT_CONTROL = "laminar/B738/effects/flight_control";
+	private final String BRAKE_TEMP = "laminar/B738/effects/brake_temp";
+	private final String GS_ON_PFD = "laminar/B738/gs_on_pfd";
+	private final String GPWS_TEST_RUNNING = "laminar/B738/system/gpws_test_running";
+	private final String FF_EICAS = "laminar/B738/ff_eicas";
 	
 	public float brake_temp_left_in = 0f;
 	public float brake_temp_left_out = 0f;
@@ -84,6 +89,11 @@ public class Systems extends BaseDataClass {
 	public float flaps_r_deflection = 0f;
 	public int sim_paused = 0;
 	public int rel_gls = 0;
+	public int flight_control = 0;
+	public int brake_temp = 0;
+	public int gs_on_pfd = 0;
+	public int gpws_test_running = 0;
+	public int ff_eicas = 0;
 	public int lowerdu_page = 0;
 	public int lowerdu_page2 = 0;
 	public int windsheer = 0;
@@ -178,6 +188,21 @@ public class Systems extends BaseDataClass {
 					break;
 				case REL_GLS:
 					rel_gls = Integer.parseInt(object.getValue()[0]);
+					break;
+				case FLIGHT_CONTROL:
+					flight_control = Integer.parseInt(object.getValue()[0]);
+					break;
+				case BRAKE_TEMP:
+					brake_temp = Integer.parseInt(object.getValue()[0]);
+					break;
+				case GS_ON_PFD:
+					gs_on_pfd = Integer.parseInt(object.getValue()[0]);
+					break;
+				case GPWS_TEST_RUNNING:
+					gpws_test_running = Integer.parseInt(object.getValue()[0]);
+					break;
+				case FF_EICAS:
+					ff_eicas = Integer.parseInt(object.getValue()[0]);
 					break;
 				case LOWERDU_PAGE:
 					lowerdu_page = Integer.parseInt(object.getValue()[0]);
@@ -339,6 +364,11 @@ public class Systems extends BaseDataClass {
 		iface.includeDataRef(FLAPS_R_DEFLECTION, 0.001f);
 		iface.includeDataRef(SIM_PAUSED);
 		iface.includeDataRef(REL_GLS);
+		iface.includeDataRef(FLIGHT_CONTROL);
+		iface.includeDataRef(BRAKE_TEMP);
+		iface.includeDataRef(GS_ON_PFD);
+		iface.includeDataRef(GPWS_TEST_RUNNING);
+		iface.includeDataRef(FF_EICAS);
 		iface.includeDataRef(LOWERDU_PAGE);
 		iface.includeDataRef(LOWERDU_PAGE2);
 		iface.includeDataRef(WINDSHEER);
@@ -371,6 +401,11 @@ public class Systems extends BaseDataClass {
 		iface.observeDataRef(FLAPS_R_DEFLECTION, systems);
 		iface.observeDataRef(SIM_PAUSED, systems);
 		iface.observeDataRef(REL_GLS, systems);
+		iface.observeDataRef(FLIGHT_CONTROL, systems);
+		iface.observeDataRef(BRAKE_TEMP, systems);
+		iface.observeDataRef(GS_ON_PFD, systems);
+		iface.observeDataRef(GPWS_TEST_RUNNING, systems);
+		iface.observeDataRef(FF_EICAS, systems);
 		iface.observeDataRef(LOWERDU_PAGE, systems);
 		iface.observeDataRef(LOWERDU_PAGE2, systems);
 		iface.observeDataRef(WINDSHEER, systems);
@@ -408,6 +443,11 @@ public class Systems extends BaseDataClass {
 		iface.excludeDataRef(FLAPS_R_DEFLECTION);
 		iface.excludeDataRef(SIM_PAUSED);
 		iface.excludeDataRef(REL_GLS);
+		iface.excludeDataRef(FLIGHT_CONTROL);
+		iface.excludeDataRef(BRAKE_TEMP);
+		iface.excludeDataRef(GS_ON_PFD);
+		iface.excludeDataRef(GPWS_TEST_RUNNING);
+		iface.excludeDataRef(FF_EICAS);
 		iface.excludeDataRef(LOWERDU_PAGE);
 		iface.excludeDataRef(LOWERDU_PAGE2);
 		iface.excludeDataRef(WINDSHEER);
@@ -440,6 +480,11 @@ public class Systems extends BaseDataClass {
 		iface.unObserveDataRef(FLAPS_R_DEFLECTION, systems);
 		iface.unObserveDataRef(SIM_PAUSED, systems);
 		iface.unObserveDataRef(REL_GLS, systems);
+		iface.unObserveDataRef(FLIGHT_CONTROL, systems);
+		iface.unObserveDataRef(BRAKE_TEMP, systems);
+		iface.unObserveDataRef(GS_ON_PFD, systems);
+		iface.unObserveDataRef(GPWS_TEST_RUNNING, systems);
+		iface.unObserveDataRef(FF_EICAS, systems);
 		iface.unObserveDataRef(LOWERDU_PAGE, systems);
 		iface.unObserveDataRef(LOWERDU_PAGE2, systems);
 		iface.unObserveDataRef(WINDSHEER, systems);

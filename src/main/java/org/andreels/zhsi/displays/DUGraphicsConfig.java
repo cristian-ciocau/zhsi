@@ -81,7 +81,7 @@ public class DUGraphicsConfig {
 	public Color color_markings = new Color(0xE5E5E5);
 	public Color color_amber = new Color(0xFBA81F);
 	public Color color_red = new Color(0xFF0000);
-	public Color color_navaid = new Color(0x00CCFF); //was  0x4D88FF
+	public Color color_navaid = new Color(0x00CCFF);
 	public Color color_instrument_gray = new Color(0x353539);
 
 	//Fonts

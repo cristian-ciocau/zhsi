@@ -35,9 +35,6 @@ import org.andreels.zhsi.ModelFactory;
 
 public class Chrono extends InstrumentBaseClass {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	private Ellipse2D.Float clockClip = new Ellipse2D.Float();
@@ -53,7 +50,6 @@ public class Chrono extends InstrumentBaseClass {
 	private BufferedImage img_Needle = new BufferedImage(16, 100, BufferedImage.TYPE_INT_ARGB);
 	private Graphics2D needle = img_Needle.createGraphics();
 	
-
 	public Chrono(ModelFactory model_factory, String title, String pilot) {
 		super(model_factory, title, pilot);
 
@@ -171,6 +167,9 @@ public class Chrono extends InstrumentBaseClass {
 		g2.setFont(rs.chronoFont.deriveFont(30f));
 		g2.drawString("ET", -40, 110);
 		g2.drawString("CHR", 20, 110);
+		g2.drawString("DAY",-80, 0);
+		g2.drawString("MO", 0, 0);
+		g2.drawString("YR", 60, 0);
 		g2.setFont(rs.chronoSegFont.deriveFont(58f));
 		g2.drawString("88:88", -100, -35);
 		g2.drawString("88:88", -100, 80);
@@ -182,11 +181,11 @@ public class Chrono extends InstrumentBaseClass {
 		if(this.xpd.chrono_display_mode(pilot) == 1 || this.xpd.chrono_display_mode(pilot) == 2) {
 			g2.drawString("UTC", 140, -205);
 		}else {
-			g2.drawString("MAN", 110, -225);
+			g2.drawString("MAN", 140, -205);
 		}
 		
 		if(this.xpd.chrono_et_mode(pilot) == 1) {
-			g2.drawString("RUN", -225, 180);
+			g2.drawString("RUN", -205, 200);
 		}else if (this.xpd.chrono_et_mode(pilot) == 0) {
 			g2.drawString("HLD", -205, 200);
 		}
@@ -195,20 +194,29 @@ public class Chrono extends InstrumentBaseClass {
 		
 		//time and date
 		g2.setFont(rs.chronoSegFont.deriveFont(58f));
-		if(this.xpd.chrono_display_mode(pilot) == 1 || this.xpd.chrono_display_mode(pilot) == 3) {
-			if(this.xpd.chrono_display_mode(pilot) == 3) {
+		if (this.xpd.chrono_display_mode(pilot) == 1 || this.xpd.chrono_display_mode(pilot) == 3) {
+			if (this.xpd.chrono_display_mode(pilot) == 3) {
 				g2.drawString(rs.df2.format(this.xpd.time_local_hrs()) + ":" + rs.df2.format(this.xpd.time_local_min()), -100, -35);
-			}else {
+			} else {
 				g2.drawString(rs.df2.format(this.xpd.time_zulu_hrs()) + ":" + rs.df2.format(this.xpd.time_zulu_min()), -100, -35);
 			}
-		}else {
-			g2.drawString(rs.df2.format(this.xpd.time_month()) + " " + rs.df2.format(this.xpd.time_day()), -100, -35);
+		} else {
+			if (this.xpd.clock_display_dmy(pilot) == 0) {
+				g2.drawString(rs.df2.format(this.xpd.time_day()) + " " + rs.df2.format(this.xpd.time_month()), -100, -35);
+				g2.setFont(rs.chronoFont.deriveFont(30f));
+				g2.drawString("DAY",-80, 0);
+				g2.drawString("MO", 0, 0);
+			}
+			if (this.xpd.clock_display_dmy(pilot) == 2) {
+				g2.drawString(rs.df2.format(this.xpd.year()), 5, -35);
+				g2.setFont(rs.chronoFont.deriveFont(30f));
+				g2.drawString("YR", 60, 0);
+			}
 		}
 		
 
 		
 		if(this.xpd.chrono_mode(pilot) == 0 || this.xpd.chrono_mode(pilot) == 1 || this.xpd.chrono_et_mode(pilot) == 0 || this.xpd.chrono_et_mode(pilot) == 1) {
-
 			
 			if((this.xpd.chrono_et_mode(pilot) == 0 || this.xpd.chrono_et_mode(pilot) == 1) && !(this.xpd.chrono_mode(pilot) == 0 || this.xpd.chrono_mode(pilot) == 1)) {
 				//ET
@@ -219,13 +227,19 @@ public class Chrono extends InstrumentBaseClass {
 			}else {
 				//CHR
 				g2.setFont(rs.chronoSegFont.deriveFont(58f));
-				g2.drawString(rs.df2.format(this.xpd.chrono_minute(pilot)) + ":" + rs.df2.format((int)this.xpd.chrono_needle(pilot)), -100, 80);
+				if (this.xpd.chrono_variant() == 0) {
+					g2.drawString(rs.df2.format(this.xpd.chrono_minute(pilot)) + ":" + rs.df2.format((int)this.xpd.chrono_needle(pilot)), -100, 80);
+				} else {
+					
+					if (this.xpd.chrono_minute(pilot) <= 9) {
+						g2.drawString("" + this.xpd.chrono_minute(pilot), 55, 80);
+					} else if (this.xpd.chrono_minute(pilot) <= 99) {
+						g2.drawString("" + this.xpd.chrono_minute(pilot), 5, 80);
+					} 
+				}
 				g2.setFont(rs.chronoFont.deriveFont(30f));
 				g2.drawString("CHR", 20, 110);
-			}
-			
-			
-			
+			}			
 		}
 		
 		g2.rotate(Math.toRadians(this.xpd.chrono_needle(pilot) * 6f), 0, 0);
@@ -234,7 +248,6 @@ public class Chrono extends InstrumentBaseClass {
 		
 		g2.setTransform(original_trans);
 		
-		//g2.dispose();
 	}
 
 }

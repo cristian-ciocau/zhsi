@@ -130,6 +130,26 @@ public class XPlaneData implements XPData {
 	public int rel_gls() {
 		return this.xpdrepo.systems.rel_gls;
 	}
+	
+	public int flight_control() {
+		return this.xpdrepo.systems.flight_control;
+	}
+	
+	public int brake_temp() {
+		return this.xpdrepo.systems.brake_temp;
+	}
+	
+	public int gs_on_pfd() {
+		return this.xpdrepo.systems.gs_on_pfd;
+	}
+	
+	public int gpws_test_running() {
+		return this.xpdrepo.systems.gpws_test_running;
+	}
+	
+	public int ff_eicas() {
+		return this.xpdrepo.systems.ff_eicas;
+	}
 
 	public boolean power_on() {
 		return (this.xpdrepo.avionics.power != 0);
@@ -504,6 +524,10 @@ public class XPlaneData implements XPData {
 	
 	public float xtrack_nd() {
 		return this.xpdrepo.fms.xtrack_nd;
+	}
+	
+	public float vnav_decel_hold_dist() {
+		return this.xpdrepo.fms.vnav_decel_hold_dist;
 	}
 
 	public int trans_alt() {
@@ -1178,7 +1202,7 @@ public class XPlaneData implements XPData {
 		return this.xpdrepo.engines.fuel_qty_lbs[1];
 	}
 
-	public float fuel_flow1() { //(value * 3600 / 1000)
+	public float fuel_flow_dspl_1() { //(value * 3600 / 1000)
 		if(this.preferences.get_preference(ZHSIPreferences.PREF_FUEL_LBS).equals("true")) {
 			if(this.fuel_flow_used_show()) {
 				return Math.round(this.xpdrepo.engines.fuel_flow_used1 * 2.20462f / 10f) /100f;
@@ -1196,7 +1220,7 @@ public class XPlaneData implements XPData {
 		
 	}
 
-	public float fuel_flow2() {
+	public float fuel_flow_dspl_2() {
 		if(this.preferences.get_preference(ZHSIPreferences.PREF_FUEL_LBS).equals("true")) {
 			if(this.fuel_flow_used_show()) {
 				return Math.round(this.xpdrepo.engines.fuel_flow_used2 * 2.20462f / 10f) /100f;
@@ -1223,7 +1247,6 @@ public class XPlaneData implements XPData {
 	@Override
 	public float fuel_flow_used2() {
 		return this.xpdrepo.engines.fuel_flow_used2;
-
 	}
 
 	public boolean eng_start_value_1() {
@@ -1240,14 +1263,6 @@ public class XPlaneData implements XPData {
 
 	public boolean eng_oil_bypass_2() {
 		return (this.xpdrepo.engines.eng_oil_bypass[1] != 0);
-	}
-
-	public boolean oil_pressure_annun_1() {
-		return (this.xpdrepo.engines.oil_pressure_annun[0] != 0);
-	}
-
-	public boolean oil_pressure_annun_2() {
-		return (this.xpdrepo.engines.oil_pressure_annun[1] != 0);
 	}
 
 	public float oil_qty_1() {
@@ -1346,12 +1361,12 @@ public class XPlaneData implements XPData {
 		return this.xpdrepo.autopilot.ap_fd_pitch_deg;
 	}
 
-	public boolean mfd_eng() {
-		return (this.xpdrepo.systems.lowerdu_page == 1);
+	public int lowerdu_page() {
+		return this.xpdrepo.systems.lowerdu_page;
 	}
 
-	public boolean mfd_sys() {
-		return (this.xpdrepo.systems.lowerdu_page == 2 || this.xpdrepo.systems.lowerdu_page2 == 1);
+	public int lowerdu_page2() {
+		return this.xpdrepo.systems.lowerdu_page2;
 	}
 
 	public float brake_temp_left_in() {
@@ -2558,6 +2573,11 @@ public class XPlaneData implements XPData {
 	public float gp_err_pfd() {
 		return this.xpdrepo.fms.gp_err_pfd;
 	}
+	
+	@Override
+	public int track_up() {
+		return this.xpdrepo.fms.track_up;
+	}
 
 	@Override
 	public float yaw_rotation() {
@@ -2814,6 +2834,26 @@ public class XPlaneData implements XPData {
 			return this.xpdrepo.avionics.fo_chrono_mode;
 		}
 	}
+	
+	@Override
+	public int chrono_variant() {
+		return this.xpdrepo.avionics.chrono_variant;
+	}
+	
+	@Override
+	public int year() {
+		return this.xpdrepo.avionics.year;
+	}
+	
+	@Override
+	public int clock_display_dmy(String pilot) {
+		switch (pilot) {
+		case "cpt":
+			return this.xpdrepo.avionics.clock_display_dmy_capt;
+		default:
+			return this.xpdrepo.avionics.clock_display_dmy_fo;
+		}
+	}
 
 	@Override
 	public int time_zulu_hrs() {
@@ -2943,6 +2983,11 @@ public class XPlaneData implements XPData {
 	@Override
 	public float dc_volt_value() {
 		return this.xpdrepo.elec.dc_volt_value;
+	}
+	
+	@Override
+	public int battery_on() {
+		return this.xpdrepo.elec.battery_on[0];
 	}
 
 	@Override

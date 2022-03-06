@@ -39,6 +39,7 @@ public class FMS extends BaseDataClass {
 	private final String RNP = "laminar/B738/fms/rnp";
 	private final String VRNP = "laminar/B738/fms/vrnp";
 	private final String XTRACK_ND = "laminar/B738/fms/xtrack_nd";
+	private final String VNAV_DECEL_HOLD_DIST = "laminar/B738/fms/vnav_decel_hold_dist";
 	private final String TRANS_ALT = "laminar/B738/FMS/fmc_trans_alt";
 	private final String TRANS_LVL = "laminar/B738/FMS/fmc_trans_lvl";
 	private final String[] FPLN_ACTIVE = {"laminar/B738/fms/fpln_acive","laminar/B738/fms/fpln_acive_fo"};
@@ -94,12 +95,14 @@ public class FMS extends BaseDataClass {
 	private final String GP_ERR_PFD = "laminar/B738/fms/gp_err_pfd";
 	private final String APPROACH_FLAPS = "laminar/B738/FMS/approach_flaps";
 	private final String APPROACH_SPEED = "laminar/B738/FMS/approach_speed";
+	private final String TRACK_UP = "laminar/B738/fms/track_up";
 	
 	public float anp;
 	public float vanp;
 	public float rnp;
 	public float vrnp;
 	public float xtrack_nd;
+	public float vnav_decel_hold_dist = 0f;
 	public int trans_alt;
 	public int trans_lvl;
 	public int[] fpln_active = new int[2];
@@ -156,6 +159,7 @@ public class FMS extends BaseDataClass {
 	public float approach_speed = 0f;
 	public float fms_track = 0f;
 	public float gp_err_pfd = 0f;
+	public int track_up = 0;
 	
 	//fms active route lnav curves
 	
@@ -303,6 +307,9 @@ public class FMS extends BaseDataClass {
 				case XTRACK_ND:
 					xtrack_nd = Float.parseFloat(object.getValue()[0]);
 					break;
+				case VNAV_DECEL_HOLD_DIST:
+					vnav_decel_hold_dist = Float.parseFloat(object.getValue()[0]);
+					break;
 				case TRANS_ALT:
 					trans_alt = Integer.parseInt(object.getValue()[0]);
 					break;
@@ -416,6 +423,9 @@ public class FMS extends BaseDataClass {
 					break;
 				case GP_ERR_PFD:
 					gp_err_pfd = Float.parseFloat(object.getValue()[0]);
+					break;
+				case TRACK_UP:
+					track_up = Integer.parseInt(object.getValue()[0]);
 					break;
 				}
 				
@@ -773,6 +783,7 @@ public class FMS extends BaseDataClass {
 		iface.includeDataRef(RNP, 0.001f);
 		iface.includeDataRef(VRNP, 0.001f);
 		iface.includeDataRef(XTRACK_ND, 0.01f);
+		iface.includeDataRef(VNAV_DECEL_HOLD_DIST, 0.1f);
 		iface.includeDataRef(TRANS_ALT);
 		iface.includeDataRef(TRANS_LVL);
 		iface.includeDataRef(FPLN_NAV_ID);
@@ -808,12 +819,14 @@ public class FMS extends BaseDataClass {
 		iface.includeDataRef(DIR_SEG3_RADIUS, 0.001f);
 		iface.includeDataRef(DIR_SEG3_TURN, 0.1f);
 		iface.includeDataRef(GP_ERR_PFD, 1f);
+		iface.includeDataRef(TRACK_UP);
 		
 		iface.observeDataRef(ANP, fms_data);
 		iface.observeDataRef(VANP, fms_data);
 		iface.observeDataRef(RNP, fms_data);
 		iface.observeDataRef(VRNP, fms_data);
 		iface.observeDataRef(XTRACK_ND, fms_data);
+		iface.observeDataRef(VNAV_DECEL_HOLD_DIST, fms_data);
 		iface.observeDataRef(TRANS_ALT, fms_data);
 		iface.observeDataRef(TRANS_LVL, fms_data);
 		iface.observeDataRef(FPLN_NAV_ID, fms_data);
@@ -849,6 +862,7 @@ public class FMS extends BaseDataClass {
 		iface.observeDataRef(DIR_SEG3_RADIUS, fms_data);
 		iface.observeDataRef(DIR_SEG3_TURN, fms_data);
 		iface.observeDataRef(GP_ERR_PFD, fms_data);
+		iface.observeDataRef(TRACK_UP, fms_data);
 		
 		for(int i = 0; i < 2; i++) {
 			iface.includeDataRef(FPLN_ACTIVE[i]);
@@ -1004,6 +1018,7 @@ public class FMS extends BaseDataClass {
 		iface.excludeDataRef(RNP);
 		iface.excludeDataRef(VRNP);
 		iface.excludeDataRef(XTRACK_ND);
+		iface.excludeDataRef(VNAV_DECEL_HOLD_DIST);
 		iface.excludeDataRef(TRANS_ALT);
 		iface.excludeDataRef(TRANS_LVL);
 		iface.excludeDataRef(FPLN_NAV_ID);
@@ -1039,12 +1054,14 @@ public class FMS extends BaseDataClass {
 		iface.excludeDataRef(DIR_SEG3_RADIUS);
 		iface.excludeDataRef(DIR_SEG3_TURN);
 		iface.excludeDataRef(GP_ERR_PFD);
+		iface.excludeDataRef(TRACK_UP);
 		
 		iface.unObserveDataRef(ANP, fms_data);
 		iface.unObserveDataRef(VANP, fms_data);
 		iface.unObserveDataRef(RNP, fms_data);
 		iface.unObserveDataRef(VRNP, fms_data);
 		iface.unObserveDataRef(XTRACK_ND, fms_data);
+		iface.unObserveDataRef(VNAV_DECEL_HOLD_DIST, fms_data);
 		iface.unObserveDataRef(TRANS_ALT, fms_data);
 		iface.unObserveDataRef(TRANS_LVL, fms_data);
 		iface.unObserveDataRef(FPLN_NAV_ID, fms_data);
@@ -1080,6 +1097,7 @@ public class FMS extends BaseDataClass {
 		iface.unObserveDataRef(DIR_SEG3_RADIUS, fms_data);
 		iface.unObserveDataRef(DIR_SEG3_TURN, fms_data);
 		iface.unObserveDataRef(GP_ERR_PFD, fms_data);
+		iface.unObserveDataRef(TRACK_UP, fms_data);
 		
 		for(int i = 0; i < 2; i++) {
 			iface.excludeDataRef(FPLN_ACTIVE[i]);

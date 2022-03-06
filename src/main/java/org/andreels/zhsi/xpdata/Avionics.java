@@ -67,7 +67,11 @@ public class Avionics extends BaseDataClass {
 	private final String TIME_ZULU_MIN = "sim/cockpit2/clock_timer/zulu_time_minutes";
 	private final String TIME_LOCAL_HRS = "sim/cockpit2/clock_timer/local_time_hours";
 	private final String TIME_LOCAL_MIN = "sim/cockpit2/clock_timer/local_time_minutes";
-	
+	//
+	private final String CHRONO_VARIANT = "laminar/B738/chrono_variant";
+	private final String YEAR = "laminar/B738/clock/year";
+	private final String CLOCK_DISPLAY_DMY_CAPT = "laminar/B738/clock/clock_display_dmy_capt";
+	private final String CLOCK_DISPLAY_DMY_FO = "laminar/B738/clock/clock_display_dmy_fo";
 	//
 	private final String CPT_CHRONO_MODE = "laminar/B738/clock/captain/chrono_mode";
 	private final String CPT_CHRONO_NEEDLE = "laminar/B738/clock/captain/chrono_seconds_needle";
@@ -122,6 +126,10 @@ public class Avionics extends BaseDataClass {
 	public int time_local_min = 0;
 	public int time_day = 0;
 	public int time_month = 0;
+	public int chrono_variant = 0;
+	public int year = 0;
+	public int clock_display_dmy_capt = 0;
+	public int clock_display_dmy_fo = 0;
 	public int cpt_chrono_mode = 0;
 	public float cpt_chrono_needle = 0;
 	public float cpt_chrono_minute = 0.0f;
@@ -155,6 +163,10 @@ public class Avionics extends BaseDataClass {
 		drefs.add(TIME_ZULU_MIN);
 		drefs.add(TIME_LOCAL_HRS);
 		drefs.add(TIME_LOCAL_MIN);
+		drefs.add(CHRONO_VARIANT);
+		drefs.add(YEAR);
+		drefs.add(CLOCK_DISPLAY_DMY_CAPT);
+		drefs.add(CLOCK_DISPLAY_DMY_FO);
 		drefs.add(CPT_CHRONO_MODE);
 		drefs.add(CPT_CHRONO_MINUTE);
 		drefs.add(CPT_CHRONO_DISPLAY_MODE);
@@ -218,6 +230,14 @@ public class Avionics extends BaseDataClass {
 				case CPT_CHRONO_ET_MIN: cpt_chrono_et_min = Float.parseFloat(object.getValue()[0]);
 					break;
 				case CPT_CHRONO_NEEDLE: cpt_chrono_needle = Float.parseFloat(object.getValue()[0]);
+					break;
+				case CHRONO_VARIANT: chrono_variant = Integer.parseInt(object.getValue()[0]);
+					break;
+				case YEAR: year = Integer.parseInt(object.getValue()[0]);
+					break;
+				case CLOCK_DISPLAY_DMY_CAPT: clock_display_dmy_capt = Integer.parseInt(object.getValue()[0]);
+					break;
+				case CLOCK_DISPLAY_DMY_FO: clock_display_dmy_fo = Integer.parseInt(object.getValue()[0]);
 					break;
 				case CPT_CHRONO_MODE: cpt_chrono_mode = Integer.parseInt(object.getValue()[0]);
 					break;

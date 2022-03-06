@@ -66,10 +66,10 @@ public class MFD2 extends DUBaseClass {
 		g2.drawRect(text_x + 125, text_y + 68, 100, 45);
 		g2.setFont(rs.glass40);
 		if(this.xpd.eng1_n2() > 0f) {
-			g2.drawString(gc.mfd_ff.format(this.xpd.fuel_flow1()), text_x - 183, text_y + 107);	
+			g2.drawString(gc.mfd_ff.format(this.xpd.fuel_flow_dspl_1()), text_x - 183, text_y + 107);	
 		}
 		if(this.xpd.eng2_n2() > 0f) {
-			g2.drawString(gc.mfd_ff.format(this.xpd.fuel_flow2()), text_x + 133, text_y + 107);
+			g2.drawString(gc.mfd_ff.format(this.xpd.fuel_flow_dspl_2()), text_x + 133, text_y + 107);
 		}
 		g2.setTransform(original_trans);
 		

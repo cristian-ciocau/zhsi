@@ -39,9 +39,8 @@ public class Engines extends BaseDataClass {
 	private final String[] FUEL_QTY_LBS = {"laminar/B738/fuel/left_tank_lbs", "laminar/B738/fuel/center_tank_lbs", "laminar/B738/fuel/right_tank_lbs"};
 	private final String[] ENG_OIL_BYPASS = {"laminar/B738/engine/eng1_oil_filter_bypass", "laminar/B738/engine/eng2_oil_filter_bypass"};
 	private final String[] ENG_START_VALUE = {"laminar/B738/engine/start_valve1", "laminar/B738/engine/start_valve2"};
-	private final String FUEL_FLOW = "sim/flightmodel/engine/ENGN_FF_"; //(value * 3600 / 1000) float[8]
+	private final String FUEL_FLOW = "laminar/B738/engine/fuel_flow_kg_sec"; //(value * 3600 / 1000) float[8]
 	private final String N1_PERCENT = "sim/cockpit2/engine/indicators/N1_percent"; //float[8] 
-	private final String OIL_PRESSURE_ANNUN = "sim/cockpit2/annunciators/oil_pressure_low"; //float[8] 
 	private final String OIL_QTY = "sim/cockpit2/engine/indicators/oil_quantity_ratio"; // float[8]
 	private final String N1_MODE = "laminar/B738/FMS/N1_mode"; //0 = MAN; 1 = TO 2 = TO 1 3 = TO 2
 	private final String FUEL_FLOW_USED_SHOW = "laminar/B738/fuel_flow_used_show";
@@ -70,7 +69,6 @@ public class Engines extends BaseDataClass {
 	public float[] eng_start_value = new float[2];
 	public float[] fuel_flow = new float[2];
 	public float[] n1_percent = new float[2];
-	public int[] oil_pressure_annun = new int[2];
 	public float[] oil_qty = new float[2];
 	public float[] oil_temp_c = new float[2];
 	public float[] eng_oil_press = new float[2];
@@ -113,13 +111,6 @@ public class Engines extends BaseDataClass {
 					for(int i = 0; i < 2; i++) {
 						if(object.getName().equals(N1_PERCENT)) {
 							n1_percent[i] = Float.parseFloat(object.getValue()[i]);
-						}
-					}
-					break;
-				case OIL_PRESSURE_ANNUN:
-					for(int i = 0; i < 2; i++) {
-						if(object.getName().equals(OIL_PRESSURE_ANNUN)) {
-							oil_pressure_annun[i] = Integer.parseInt(object.getValue()[i]);
 						}
 					}
 					break;
@@ -239,10 +230,9 @@ public class Engines extends BaseDataClass {
 	@Override
 	public void includeDrefs() {
 	
-		iface.includeDataRef(FUEL_FLOW, 0.001f);
+		iface.includeDataRef(FUEL_FLOW, 0.0001f);
 		iface.includeDataRef(N1_PERCENT, 0.001f);
 		iface.includeDataRef(OIL_QTY);
-		iface.includeDataRef(OIL_PRESSURE_ANNUN);	
 		iface.includeDataRef(N1_MODE);
 		iface.includeDataRef(ENG1_TAI, 0.1f);
 		iface.includeDataRef(ENG2_TAI, 0.1f);
@@ -262,8 +252,7 @@ public class Engines extends BaseDataClass {
 		
 		iface.observeDataRef(FUEL_FLOW, engines);
 		iface.observeDataRef(N1_PERCENT, engines);
-		iface.observeDataRef(OIL_QTY, engines);
-		iface.observeDataRef(OIL_PRESSURE_ANNUN, engines);	
+		iface.observeDataRef(OIL_QTY, engines);	
 		iface.observeDataRef(N1_MODE, engines);
 		iface.observeDataRef(ENG1_TAI, engines);
 		iface.observeDataRef(ENG2_TAI, engines);
@@ -319,7 +308,6 @@ public class Engines extends BaseDataClass {
 		iface.excludeDataRef(FUEL_FLOW);
 		iface.excludeDataRef(N1_PERCENT);
 		iface.excludeDataRef(OIL_QTY);
-		iface.excludeDataRef(OIL_PRESSURE_ANNUN);	
 		iface.excludeDataRef(N1_MODE);
 		iface.excludeDataRef(ENG1_TAI);
 		iface.excludeDataRef(ENG2_TAI);
@@ -340,7 +328,6 @@ public class Engines extends BaseDataClass {
 		iface.unObserveDataRef(FUEL_FLOW, engines);
 		iface.unObserveDataRef(N1_PERCENT, engines);
 		iface.unObserveDataRef(OIL_QTY, engines);
-		iface.unObserveDataRef(OIL_PRESSURE_ANNUN, engines);
 		iface.unObserveDataRef(N1_MODE, engines);
 		iface.unObserveDataRef(ENG1_TAI, engines);
 		iface.unObserveDataRef(ENG2_TAI, engines);

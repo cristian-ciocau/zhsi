@@ -156,9 +156,9 @@ public class ENGINE extends DUBaseClass {
 			
 			drawDial(350, 310, eng2egt,eng2egt_fill, this.xpd.eng2_egt(), 210, g2);
 			
-			if(this.preferences.get_preference(ZHSIPreferences.PREF_COMPACT_DISPLAY).equals("true")) {
+			if (this.xpd.lowerdu_page() == 2) {
 				showCompactDisplay();
-			}else {
+			} else if (this.xpd.ff_eicas() == 1) {
 				displayFuelFlow();
 			}
 					
@@ -327,11 +327,11 @@ public class ENGINE extends DUBaseClass {
 		g2.setFont(rs.glassFont.deriveFont(30f));
 		// if (this.xpd.eng1_n2() > 0f) {
 		if (this.xpd.eicas_ff1() || this.xpd.fuel_flow_used_show()) {	
-			g2.drawString(gc.mfd_ff.format(this.xpd.fuel_flow1()), text_x - 180, text_y + 51);	
+			g2.drawString(gc.mfd_ff.format(this.xpd.fuel_flow_dspl_1()), text_x - 180, text_y + 51);	
 		}
 		// if (this.xpd.eng2_n2() > 0f) {
 		if (this.xpd.eicas_ff2() || this.xpd.fuel_flow_used_show()) {
-			g2.drawString(gc.mfd_ff.format(this.xpd.fuel_flow2()), text_x + 130, text_y + 51);
+			g2.drawString(gc.mfd_ff.format(this.xpd.fuel_flow_dspl_2()), text_x + 130, text_y + 51);
 		}
 		
 		//OIL PRESS	
@@ -429,11 +429,11 @@ public class ENGINE extends DUBaseClass {
 		g2.setFont(rs.glassFont.deriveFont(30f));
 		// if(this.xpd.eng1_n2() > 0f) {
 		if (this.xpd.eicas_ff1() || this.xpd.fuel_flow_used_show()) {
-			g2.drawString(gc.mfd_ff.format(this.xpd.fuel_flow1()), text_x - 180, text_y + 51);	
+			g2.drawString(gc.mfd_ff.format(this.xpd.fuel_flow_dspl_1()), text_x - 180, text_y + 51);	
 		}
 		// if(this.xpd.eng2_n2() > 0f) {
 		if (this.xpd.eicas_ff2() || this.xpd.fuel_flow_used_show()) {
-			g2.drawString(gc.mfd_ff.format(this.xpd.fuel_flow2()), text_x + 135, text_y + 51);
+			g2.drawString(gc.mfd_ff.format(this.xpd.fuel_flow_dspl_2()), text_x + 135, text_y + 51);
 		}
 		g2.setTransform(original_trans);
 		
@@ -666,7 +666,7 @@ public class ENGINE extends DUBaseClass {
 			g2.drawString("OIL FILTER", 667, 151);
 			g2.drawString("BYPASS", 697, 176);
 		}
-		if(this.xpd.oil_pressure_annun_1()) {
+		if(this.xpd.eng_oil_press_1() <= 13) {
 			//ENG1 Low Oil Press
 			g2.setColor(gc.color_amber);
 			g2.fillRect(650, 183, 180, 60);
@@ -693,7 +693,7 @@ public class ENGINE extends DUBaseClass {
 			g2.drawString("OIL FILTER", 867, 151);
 			g2.drawString("BYPASS", 897, 176);
 		}
-		if(this.xpd.oil_pressure_annun_2()) {
+		if(this.xpd.eng_oil_press_2() <= 13.0) {
 			//ENG2 Low Oil Press
 			g2.setColor(gc.color_amber);
 			g2.fillRect(850, 183, 180, 60);
@@ -731,14 +731,12 @@ public class ENGINE extends DUBaseClass {
 			n1_bug_rotation = (this.xpd.eng_n1_bug_1() / 100f) * 200f;
 			n1_value = value;
 			req_rotation = this.xpd.eng1_n1_req() * 202f;
-			tq_rotate = this.xpd.thr_lvr1() * 202f;
-			ff = this.xpd.fuel_flow1();			
+			tq_rotate = this.xpd.thr_lvr1() * 202f;			
 		} else {
 			n1_bug_rotation = (this.xpd.eng_n1_bug_2() / 100f) * 200f;
 			n1_value = value;
 			req_rotation = this.xpd.eng2_n1_req() * 202f;
-			tq_rotate = this.xpd.thr_lvr2() * 202f;
-			ff = this.xpd.fuel_flow2();			
+			tq_rotate = this.xpd.thr_lvr2() * 202f;			
 		}
 		
 		if(dial == eng1n1 || dial == eng2n1) {
@@ -792,7 +790,7 @@ public class ENGINE extends DUBaseClass {
 		dial.setAngleExtent(-208);
 		g2.draw(dial);
 
-		if((dial == eng1n1 || dial == eng2n1)  && ff > 0f) {
+		if((dial == eng1n1 && this.xpd.n1_percent1() >= 18.80) || (dial == eng2n1 && this.xpd.n1_percent2() > 18.80)) {
 			//N1 diff
 			n1_diff.setFrame(-15, -15, diameter + 30, diameter + 30);
 			n1_diff.setAngleStart(rotation * -1f);
@@ -803,11 +801,9 @@ public class ENGINE extends DUBaseClass {
 		
 		// needle
 		g2.rotate(Math.toRadians(rotation), diameter/2, diameter/2);
-		g2.setStroke(gc.stroke_six);
-		int needle_offset = 0;
-		if(ff > 0f) {
-			needle_offset = 15;
-		}
+		g2.setStroke(gc.stroke_six);		
+		int needle_offset = 15;
+
 		// if(dial == eng1egt && this.xpd.eng1_n2() >= 3.9f) {
 		if(dial == eng1egt && this.xpd.eicas_ff1()) {
 			g2.drawLine(diameter/2, diameter/2, diameter - 3, diameter/2);
@@ -822,19 +818,19 @@ public class ENGINE extends DUBaseClass {
 		g2.setTransform(original_trans);
 		
 		g2.setStroke(gc.stroke_four);
-		if(dial == eng1n1 || dial == eng2n1) {
-			//commanded position
-			if(ff > 0f) {
-				g2.setStroke(gc.stroke_six);
-				g2.scale(gc.scalex, gc.scaley);
-				g2.translate(x, y);
-				g2.rotate(Math.toRadians(req_rotation), diameter/2, diameter/2);
-				g2.drawLine(diameter + 5, diameter/2, diameter + 15, diameter/2);
-				g2.setTransform(original_trans);
-			}
+				
+		if((dial == eng1n1 && this.xpd.n1_percent1() >= 18.80) || (dial == eng2n1 && this.xpd.n1_percent2() > 18.80)) {
 			
+			//commanded position
+			g2.setStroke(gc.stroke_six);
+			g2.scale(gc.scalex, gc.scaley);
+			g2.translate(x, y);
+			g2.rotate(Math.toRadians(req_rotation), diameter/2, diameter/2);
+			g2.drawLine(diameter + 5, diameter/2, diameter + 15, diameter/2);
+			g2.setTransform(original_trans);
+		
 			// hardware throttle lever position
-			if(this.preferences.get_preference(ZHSIPreferences.PREF_HARDWARE_LEVERS).equals("true") && ff > 0f) {
+			if(this.preferences.get_preference(ZHSIPreferences.PREF_HARDWARE_LEVERS).equals("true")) {
 				g2.scale(gc.scalex, gc.scaley);
 				g2.translate(x, y);
 				g2.rotate(Math.toRadians(tq_rotate), diameter/2, diameter/2);
@@ -843,12 +839,15 @@ public class ENGINE extends DUBaseClass {
 				if(rotation - tq_rotate >= 2f || rotation - tq_rotate <= -2f) {
 					g2.setColor(gc.color_amber);
 				}else {
-					g2.setColor(gc.color_lime);
+					g2.setColor(gc.color_navaid);
 				}	
 				g2.fillPolygon(thr_lvl_triangle_x, thr_lvl_triangle_y, 3);
 				g2.setTransform(original_trans);
 				g2.setColor(gc.color_markings);
 			}
+		}
+			
+		if(dial == eng1n1 || dial == eng2n1) {
 			
 			// tick marks
 			g2.scale(gc.scalex, gc.scaley);
@@ -869,8 +868,7 @@ public class ENGINE extends DUBaseClass {
 				g2.drawLine(diameter + 13, diameter/2, diameter + 20, diameter/2 + 8);
 				g2.drawLine(diameter + 13, diameter/2, diameter + 20, diameter/2 - 8);
 				g2.setTransform(original_trans);
-			}
-						
+			}						
 		}
 		
 		//egt amber bands

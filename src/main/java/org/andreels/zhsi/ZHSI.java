@@ -39,7 +39,7 @@ import javafx.stage.Stage;
 
 public class ZHSI extends Application {
 	private static Logger logger = Logger.getLogger("org.andreels.zhsi");
-	private String version = "3.3.1";
+	private String version = "3.3.9";
 	private ZHSIPreferences preferences;
 	
 	@Override
@@ -47,7 +47,7 @@ public class ZHSI extends Application {
 				
 		this.preferences = ZHSIPreferences.getInstance();
 		logger.info("ZHSI version " + version + " started");
-		
+
 		primaryStage.setTitle("ZHSI " + version);
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("/zhsifx.fxml"));

@@ -153,7 +153,6 @@ public class ZHSIPreferences {
 	public static final String PREF_RANGE_RINGS = "range.rings.enabled";
 	public static final String PREF_XRAAS_ENABLE = "xraas.enabled";
 	public static final String PREF_XRAAS_FONT_SIZE = "xraas.font.size";
-	public static final String PREF_COMPACT_DISPLAY = "compact.display.enabled";
 	
 	public static final String PREF_FLAP_GAUGE_ENABLE = "flapgauge.enable";
 	public static final String PREF_FLAP_GAUGE_POS_X = "flapgauge.posx";
@@ -164,8 +163,7 @@ public class ZHSIPreferences {
 	public static final String PREF_WEATHER_DETAIL = "weather.detail";
 	public static final String PREF_TERRAIN_DETAIL = "terrain.detail";
 	
-	public static final String PREF_ALT_TAPE_SMOOTHNESS = "alt.tape.smoothness";
-	public static final String PREF_IAS_TAPE_SMOOTHNESS = "ias.tape.smoothness";
+	public static final String PREF_ARPT_MIN_RWY_LENGTH = "airport.minimum.runway.length";
 	
 	public static final String PREF_DCVOLTS_X = "elec.dcvolts.x";
 	public static final String PREF_DCAMPS_X = "elec.dcamps.x";
@@ -200,6 +198,8 @@ public class ZHSIPreferences {
 	public static final String WXR_COLOR_7 = "wxr.color.7";
 	public static final String WXR_COLOR_8 = "wxr.color.8";
 	public static final String WXR_COLOR_9 = "wxr.color.9";
+	
+	public static final String PREF_RMI_COLOR = "rmi.color";
 
 	private static ZHSIPreferences instance;
 	private Properties preferences;
@@ -575,11 +575,6 @@ public class ZHSIPreferences {
 			this.unsaved_changes = true;
 		}
 		
-		if (!this.preferences.containsKey(PREF_COMPACT_DISPLAY)) {
-			this.preferences.setProperty(PREF_COMPACT_DISPLAY, "false");
-			this.unsaved_changes = true;
-		}
-		
 		if (!this.preferences.containsKey(PREF_XRAAS_ENABLE)) {
 			this.preferences.setProperty(PREF_XRAAS_ENABLE, "false");
 			this.unsaved_changes = true;
@@ -775,13 +770,8 @@ public class ZHSIPreferences {
 			this.unsaved_changes = true;
 		}
 		
-		if (!this.preferences.containsKey(PREF_ALT_TAPE_SMOOTHNESS)) {
-			this.preferences.setProperty(PREF_ALT_TAPE_SMOOTHNESS, "70");
-			this.unsaved_changes = true;
-		}
-		
-		if (!this.preferences.containsKey(PREF_IAS_TAPE_SMOOTHNESS)) {
-			this.preferences.setProperty(PREF_IAS_TAPE_SMOOTHNESS, "70");
+		if (!this.preferences.containsKey(PREF_ARPT_MIN_RWY_LENGTH)) {
+			this.preferences.setProperty(PREF_ARPT_MIN_RWY_LENGTH, "1700");
 			this.unsaved_changes = true;
 		}
 		
@@ -882,6 +872,11 @@ public class ZHSIPreferences {
 		
 		if (!this.preferences.containsKey(WXR_COLOR_9)) {
 			this.preferences.setProperty(WXR_COLOR_9, "0xA000A0");
+			this.unsaved_changes = true;
+		}
+		
+		if (!this.preferences.containsKey(PREF_RMI_COLOR)) {
+			this.preferences.setProperty(PREF_RMI_COLOR, "0xFF0000");
 			this.unsaved_changes = true;
 		}
 		

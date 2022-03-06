@@ -251,7 +251,7 @@ public class AptNavXP900DatNavigationObjectBuilder {
 					lon =  Float.parseFloat(tokens[4]);
 					surface = Integer.parseInt(tokens[5]);
 					longest = Float.parseFloat(tokens[6]);
-					if ((surface == 1 || surface == 2) && longest > 1200) {
+					if ((surface == 1 || surface == 2) && (longest >= 1200 || longest >= Float.parseFloat(this.preferences.get_preference(ZHSIPreferences.PREF_ARPT_MIN_RWY_LENGTH)))) {
 						nor.add_nav_object(new Airport(airport_icao_code, airport_name, lat, lon, elevation, surface, longest));
 					}
 					

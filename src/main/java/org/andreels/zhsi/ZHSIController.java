@@ -1487,11 +1487,11 @@ public class ZHSIController implements Initializable {
 		} else {
 			this.rudderTrim.setSelected(false);
 		}
-		if (this.preferences.get_preference(ZHSIPreferences.PREF_COMPACT_DISPLAY).equals("true")) {
-			this.compactEngine.setSelected(true);
-		} else {
-			this.compactEngine.setSelected(false);
-		}
+//		if (this.preferences.get_preference(ZHSIPreferences.PREF_COMPACT_DISPLAY).equals("true")) {
+//			this.compactEngine.setSelected(true);
+//		} else {
+//			this.compactEngine.setSelected(false);
+//		}
 		if (this.preferences.get_preference(ZHSIPreferences.PREF_XRAAS_ENABLE).equals("true"))
 			this.enableXraas.setSelected(true);
 		
@@ -1578,11 +1578,11 @@ public class ZHSIController implements Initializable {
 		} else {
 			this.preferences.set_preference(ZHSIPreferences.PREF_RUDDER_INDICATOR, "false");
 		}
-		if (compactEngine.isSelected()) {
-			this.preferences.set_preference(ZHSIPreferences.PREF_COMPACT_DISPLAY, "true");
-		} else {
-			this.preferences.set_preference(ZHSIPreferences.PREF_COMPACT_DISPLAY, "false");
-		}
+//		if (compactEngine.isSelected()) {
+//			this.preferences.set_preference(ZHSIPreferences.PREF_COMPACT_DISPLAY, "true");
+//		} else {
+//			this.preferences.set_preference(ZHSIPreferences.PREF_COMPACT_DISPLAY, "false");
+//		}
 		if (enableXraas.isSelected()) {
 			this.preferences.set_preference(ZHSIPreferences.PREF_XRAAS_ENABLE, "true");
 		} else {

@@ -30,12 +30,10 @@ import java.awt.geom.GeneralPath;
 import java.awt.image.BufferedImage;
 
 import org.andreels.zhsi.ModelFactory;
+import org.andreels.zhsi.ZHSIPreferences;
 
 public class RMI extends InstrumentBaseClass {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private GeneralPath clipShape = new GeneralPath();
@@ -51,6 +49,12 @@ public class RMI extends InstrumentBaseClass {
 	
 	private boolean imagesRedrawRequired = true;
 	private Font topFont;
+	private Font hdgFont;
+	
+	public Color rmi_color = new Color(
+						Integer.valueOf(this.preferences.get_preference(ZHSIPreferences.PREF_RMI_COLOR).substring(2,4),16),
+						Integer.valueOf(this.preferences.get_preference(ZHSIPreferences.PREF_RMI_COLOR).substring(4,6),16),
+						Integer.valueOf(this.preferences.get_preference(ZHSIPreferences.PREF_RMI_COLOR).substring(6,8),16));
 	
 	private int[] x_points = {0, -8, 8};
 	private int[] y_points = {-200, -230, -230};
@@ -72,6 +76,9 @@ public class RMI extends InstrumentBaseClass {
 	private int[] y_points7 = {78, 60, 78, 78};
 	private int[] x_points8 = {-9, -12, -15, -9};
 	private int[] y_points8 = {74, 69, 74, 74};
+	
+	private int[] x_points9 = {0, 75, 80, 85, 100, 145, 195, 110, 0, 0};
+	private int[] y_points9 = {-5, -13, 5, -14, -15, -8, 8, 8, 20, -5};
 
 	public RMI(ModelFactory model_factory, String title, String pilot) {
 		super(model_factory, title, pilot);
@@ -83,6 +90,7 @@ public class RMI extends InstrumentBaseClass {
 		clipShape.curveTo(55, -30, 445, -30, 465, 180);
 		clipShape.closePath();
 		topFont = rs.chronoFont.deriveFont(24f);
+		hdgFont = rs.chronoFont.deriveFont(16f);
 		
 
 	}
@@ -189,8 +197,7 @@ public class RMI extends InstrumentBaseClass {
 			arrow2.draw(arrow2Path);
 			
 			arrow2.setTransform(original_trans);
-
-			
+		
 			imagesRedrawRequired = false;
 		}
 
@@ -206,61 +213,20 @@ public class RMI extends InstrumentBaseClass {
 		g2.setColor(Color.BLACK);
 		g2.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-
-		//		g2.scale(this.scalex, this.scaley);
-		//		g2.setColor(Color.GREEN);
-		//		g2.drawLine(250, 250, 250, 0);
-		//		g2.drawLine(250, 250, 250, 500);
-		//		g2.fillOval(35, 35, 430, 430);
-		//		g2.setTransform(original_trans);
-
 		//markings
-
-
-
 		g2.scale(this.scalex, this.scaley);
 		g2.rotate(Math.toRadians(this.xpd.heading("cpt") * -1), 250, 250);
 		g2.drawImage(img_markings, 0, 0, null);
 		g2.setTransform(original_trans);
 
-		//		g2.setColor(rs.color_markings);
-		//		g2.scale(this.scalex, this.scaley);
-		//		g2.translate(250, 250);
-		//		g2.rotate(Math.toRadians(this.xpd.heading("cpt") * -1), 0, 0);
-		//		for(int i = 0; i < 360; i += 5) {
-		//			if(i % 30 == 0) {
-		//				g2.setFont(rs.glass24);
-		//				g2.setStroke(rs.stroke3);
-		//				g2.drawLine(0, -180, 0, -213);
-		//				if(i > 100) {
-		//					g2.drawString("" + i / 10, -15, -150);
-		//				}else {
-		//					g2.drawString("" + i / 10, -6, -150);
-		//				}
-		//				
-		//			}else if(i % 10 == 0) {
-		//				g2.setStroke(rs.stroke3);
-		//				g2.drawLine(0, -180, 0, -213);
-		//			}else {
-		//				g2.setStroke(rs.stroke2);
-		//				g2.drawLine(0, -180, 0, -200);	
-		//			}
-		//			g2.rotate(Math.toRadians(5), 0, 0);
-		//		}
-		//		
-		//		g2.setTransform(original_trans);
-
 		//flags
-
-
 		g2.setClip(original_clipshape);
 		
 		//triangles
 		g2.scale(this.scalex, this.scaley);
 		g2.setColor(rs.color_markings);
 		g2.translate(250, 250);
-		
-		
+				
 		g2.fillPolygon(x_points, y_points, 3);
 		
 		g2.rotate(Math.toRadians(45f), 0,0);
@@ -290,12 +256,10 @@ public class RMI extends InstrumentBaseClass {
 		g2.rotate(Math.toRadians(45f), 0,0);
 		
 		g2.fillPolygon(x_points1, y_points1, 3);
-
 		
 		g2.setTransform(original_trans);
 		
 		//needles
-
 		g2.scale(this.scalex, this.scaley);
 		g2.translate(250, 250);
 		g2.rotate(Math.toRadians(this.xpd.rmi_arrow1()), 0, 0);
@@ -308,7 +272,6 @@ public class RMI extends InstrumentBaseClass {
 		g2.drawImage(img_arrow2, -25, -250, null);
 		g2.setTransform(original_trans);
 		
-
 		//center
 		g2.scale(this.scalex, this.scaley);
 		g2.translate(250, 250);
@@ -320,11 +283,9 @@ public class RMI extends InstrumentBaseClass {
 		g2.fillOval(-28, -28, 56, 56);
 		g2.setTransform(original_trans);
 
-
 		//top text markings
 		g2.setColor(rs.color_markings);
 		g2.scale(this.scalex, this.scaley);
-		//g2.setFont(rs.glass24);
 		g2.setFont(topFont);
 		g2.drawString("V", 15, 310);
 		g2.drawString("O", 14, 335);
@@ -332,16 +293,15 @@ public class RMI extends InstrumentBaseClass {
 		g2.drawString("V", 470, 310);
 		g2.drawString("O", 469, 335);
 		g2.drawString("R", 472, 360);
-
 		g2.drawString("ADF", 140, 480);
 		g2.drawString("ADF", 310, 480);
-
 		g2.setTransform(original_trans);
 		
 		// Bearing Pointer No. 1 Warning Flag
 		if (this.xpd.rmi_arrow1_no_avail() == 1.0) {
 			g2.scale(this.scalex, this.scaley);
-			g2.setColor(rs.color_amber);
+			g2.setColor(rmi_color);
+			
 			g2.translate(45, 175);
 			g2.fillPolygon(x_points4, y_points4, 8);
 			g2.setColor(Color.BLACK);
@@ -354,7 +314,7 @@ public class RMI extends InstrumentBaseClass {
 		// Bearing Pointer No. 2 Warning Flag
 		if (this.xpd.rmi_arrow2_no_avail() == 1.0) {
 			g2.scale(this.scalex, this.scaley);
-			g2.setColor(rs.color_amber);
+			g2.setColor(rmi_color);
 			g2.translate(455, 175);
 			g2.fillPolygon(x_points5, y_points5, 8);
 			g2.setColor(Color.BLACK);
@@ -365,8 +325,17 @@ public class RMI extends InstrumentBaseClass {
 			g2.drawLine(-14,78,-14,96);				
 			g2.setTransform(original_trans);
 		}
-
-
+		
+		// hdg flag
+		if (this.xpd.battery_on() == 0) {
+			g2.scale(this.scalex, this.scaley);
+			g2.setColor(rmi_color);
+			g2.translate(170, 40);
+			g2.fillPolygon(x_points9, y_points9, 10);
+			g2.setFont(hdgFont);
+			g2.setColor(Color.BLACK);
+			g2.drawString("HDG", 20, 8);
+			g2.setTransform(original_trans);
+		}		
 	}
-
 }

@@ -203,7 +203,7 @@ public class ND2 extends DUBaseClass {
 						drawTerrain();
 					}
 
-					if(this.xpd.efis_wxr_on(pilot) && ZHSIStatus.weather_receiving) {
+					if(this.xpd.efis_wxr_on(pilot) && ZHSIStatus.weather_receiving && (this.map_mode || this.map_ctr_mode || this.vor_mode || this.app_mode)) {
 						drawWeather();
 					}
 
@@ -911,7 +911,7 @@ public class ND2 extends DUBaseClass {
 	private void displayNdVnavPath() {
 				
 		g2.scale(gc.scalex, gc.scaley);
-		g2.setColor(Color.BLACK);           
+		g2.setColor(Color.BLACK); 		
 		g2.fillPolygon(vnav_path_xpoints, vnav_path_ypoints, vnav_path_xpoints.length);
 		g2.fillRect(972, 660, 105, 275);
 		g2.setColor(gc.color_markings);
@@ -1507,10 +1507,15 @@ public class ND2 extends DUBaseClass {
 					}
 				}
 				
-				//draw holds
+				//draw hold
 				
-				if ((int)legs_rad_turn[i] == 0 || (int)legs_rad_turn[i] == 1) {
-					drawHold(legs_rad_turn[i], legs_crs_mag[i], legs_hold_dist[i], legs_hold_time[i], legs_spd[i], lats[i], lons[i]);
+				if (((int)legs_rad_turn[i] == 0 || (int)legs_rad_turn[i] == 1) && i > vnav_idx - 2) {
+					if ((i == vnav_idx && this.xpd.vnav_decel_hold_dist() == 0.0) || // ie decel point
+						(i == vnav_idx - 1)) { 
+						drawHold(legs_rad_turn[i], legs_crs_mag[i], legs_hold_dist[i], legs_hold_time[i], legs_spd[i], lats[i], lons[i], 1);
+					} else {
+						drawHold(legs_rad_turn[i], legs_crs_mag[i], legs_hold_dist[i], legs_hold_time[i], legs_spd[i], lats[i], lons[i], 0);
+					}
 				}
 				
 				//draw legs
@@ -1648,10 +1653,11 @@ public class ND2 extends DUBaseClass {
 							
 						} else {
 					
-							// radii turn					
-							if (legs_seg1_radius[i] > 0.1 && 
+							// radii turn
+							if (legs_seg1_radius[i] > 0.1 &&
+								!((int)legs_rad_turn[next_idx] == 0 || (int)legs_rad_turn[next_idx] == 1) && // ignore hold
 								!(i == 0 && wpts[i].equals(origin_arpt) && !(wpts[next_idx].startsWith("RW")))) { // skip departure airport with no runway selected
-																
+								
 								// seg1
 								if ((int)legs_seg1_turn[i] == 2) {
 									// left
@@ -1705,7 +1711,7 @@ public class ND2 extends DUBaseClass {
 							
 							// rad turn
 							} else if ((int)legs_rad_turn[next_idx] != -1 && legs_rad_lat[next_idx] != 0.0 && legs_rad_lon[next_idx] != 0.0) {
-														
+								
 								if ((int)legs_rad_turn[next_idx] == 2) {
 									// left
 									g2.drawArc((int) arc_origin_x - radius, (int) arc_origin_y - radius, diameter, diameter, start_angle, arc_angle);
@@ -1972,7 +1978,7 @@ public class ND2 extends DUBaseClass {
 		
 	}
 
-	private void drawHold(float turn, float course, float dist, float time, float speed, float x, float y) {
+	private void drawHold(float turn, float course, float dist, float time, float speed, float x, float y, int active) {
 		
 		map_projection.setPoint(x, y); 
 		float xx = map_projection.getX();
@@ -1984,32 +1990,48 @@ public class ND2 extends DUBaseClass {
 		
 		g2.rotate(Math.toRadians(course), xx, yy);
 		
-		double xspeed = xspeed = this.xpd.true_airspeed_knots() + this.xpd.wind_speed_knots(); // max possible speed
-		
+		double xspeed = 0;
 		double leg_dist = 0;
-		if (time != 0) {
-			leg_dist = xspeed * time / 3600;
-		} else if (dist != 0) {
-			leg_dist = dist;
-		} else {
-			leg_dist = xspeed * 90 / 3600; // default to 1.5 min legs
-		}
-		
 		double distance = 0;
-		if (this.xpd.altitude(pilot) <= 18800) {
-			distance = Math.cos(Math.toRadians(23)) * leg_dist;
-		} else {
-			distance = Math.cos(Math.toRadians(15)) * leg_dist;
-		}
-		int yyy = (int) (yy + (distance * pixels_per_nm));
-		
-		// int radius = (int) (tas * pixels_per_nm / (20 * Math.PI));
-
 		int radius = 0;
-		if (this.xpd.altitude(pilot) <= 18800) {
-			radius = (int) ((xspeed * xspeed) / (68620 * Math.tan(Math.toRadians(23))) * pixels_per_nm);
+		int yyy = 0;
+		
+		if (active == 1) {
+		
+			xspeed = this.xpd.true_airspeed_knots() + this.xpd.wind_speed_knots(); // max possible speed
+					
+			if (time != 0) {
+				leg_dist = xspeed * time / 3600;
+			} else if (dist != 0) {
+				leg_dist = dist;
+			} else {
+				leg_dist = xspeed * 90 / 3600; // default to 1.5 min legs
+			}
+					
+			if (this.xpd.altitude(pilot) <= 18800) {
+				distance = Math.cos(Math.toRadians(23)) * leg_dist;
+			} else {
+				distance = Math.cos(Math.toRadians(15)) * leg_dist;
+			}
+			yyy = (int) (yy + (distance * pixels_per_nm));
+			
+			// int radius = (int) (tas * pixels_per_nm / (20 * Math.PI));
+		
+			if (this.xpd.altitude(pilot) <= 18800) {
+				radius = (int) ((xspeed * xspeed) / (68620 * Math.tan(Math.toRadians(23))) * pixels_per_nm);
+			} else {
+				radius = (int) ((xspeed * xspeed) / (68620 * Math.tan(Math.toRadians(15))) * pixels_per_nm);
+			}
+			
 		} else {
-			radius = (int) ((xspeed * xspeed) / (68620 * Math.tan(Math.toRadians(15))) * pixels_per_nm);
+			
+			// default for non active hold	
+			xspeed = 170;
+			leg_dist = 2;
+			distance = Math.cos(Math.toRadians(23)) * leg_dist;
+			yyy = (int) (yy + (distance * pixels_per_nm));
+			radius = (int) ((xspeed * xspeed) / (68620 * Math.tan(Math.toRadians(23))) * pixels_per_nm);
+			
 		}
 		
 		// right
@@ -2032,7 +2054,6 @@ public class ND2 extends DUBaseClass {
 	
 
 	private void drawWeather() {
-
 
 		weather_cycle += 0.008f;
 		if (weather_cycle > 1f) {
@@ -2059,7 +2080,11 @@ public class ND2 extends DUBaseClass {
 		if(extent <= -179 && extent >= -180) {
 			weather.renderWeather(g2, pixels_per_nm, max_range, map_up, map_center_x, map_center_y, scaling_factor, 1, false);
 		}
-		weather_clip.setArcByCenter(this.map_center_x, this.map_center_y, 670f * gc.scaling_factor, 0f, 180f, Arc2D.PIE);
+		if(!isMapCenter) {
+			weather_clip.setArcByCenter(this.map_center_x, this.map_center_y, 760f * gc.scaling_factor, 0f, 180f, Arc2D.PIE);
+		} else {
+			weather_clip.setArcByCenter(this.map_center_x, this.map_center_y, 375f * gc.scaling_factor, 0f, 180f, Arc2D.CHORD);
+		}
 
 		g2.clip(weather_clip);
 
@@ -2118,9 +2143,9 @@ public class ND2 extends DUBaseClass {
 		}
 
 		if(!isMapCenter) {
-			terrain_clip.setArcByCenter(this.map_center_x, this.map_center_y, 670f * gc.scaling_factor, 0f, 180f, Arc2D.PIE);
+			terrain_clip.setArcByCenter(this.map_center_x, this.map_center_y, 760f * gc.scaling_factor, 0f, 180f, Arc2D.PIE);
 		}else {
-			terrain_clip.setArcByCenter(this.map_center_x, this.map_center_y, 500f * gc.scaling_factor, 0f, 180f, Arc2D.CHORD);
+			terrain_clip.setArcByCenter(this.map_center_x, this.map_center_y, 375f * gc.scaling_factor, 0f, 180f, Arc2D.CHORD);
 		}
 		g2.clip(terrain_clip);
 
@@ -2160,7 +2185,7 @@ public class ND2 extends DUBaseClass {
 
 			}
 
-		}else {
+		} else {
 			initial_sweep_required = true;
 			initial_sweep_rotate = 180f;
 		}
@@ -2170,11 +2195,13 @@ public class ND2 extends DUBaseClass {
 	private void drawTrackLine() {
 		
 		if (!this.pln_mode) {
+			
 			g2.translate(this.map_center_x, this.map_center_y);
 			g2.scale(gc.scalex, gc.scaley);
 			g2.setColor(gc.color_markings);
 			g2.rotate(Math.toRadians(track_line_rotate), 0, 0);
 			g2.setStroke(stroke5);
+			
 			if (isMapCenter) {
 				//ctr mode
 				g2.drawLine(-10, 188, 10, 188);
@@ -2195,7 +2222,8 @@ public class ND2 extends DUBaseClass {
 					g2.drawLine(-10, -569, 10, -569);
 				}
 			}
-			if(this.xpd.efis_vsd_map(pilot)) {
+			
+			if (this.xpd.efis_vsd_map(pilot)) {
 				g2.setColor(Color.CYAN);
 				g2.setStroke(vsd_line);
 				g2.drawLine(-10, -300, -10, 0);
@@ -2203,30 +2231,33 @@ public class ND2 extends DUBaseClass {
 				g2.setColor(gc.color_markings);
 				g2.setStroke(stroke5);
 			}
+
+			if (this.map_mode || this.map_ctr_mode) {
+			
+				float turn_speed = turn_speed_averager.running_average(this.xpd.yaw_rotation()); // turn speed in deg/s
+				float turn_radius = turn_radius(turn_speed, this.xpd.groundspeed()); // turn radius in nm
+				
+				if (this.max_range > 20) {
+					// first segment : 30sec
+					draw_position_trend_vector_segment(g2, turn_radius, turn_speed, pixels_per_nm, 0f, 23f);
+					// second segment : 60sec
+					draw_position_trend_vector_segment(g2, turn_radius, turn_speed, pixels_per_nm, 38f, 68f);
+					// third segment : 90sec
+					draw_position_trend_vector_segment(g2, turn_radius, turn_speed, pixels_per_nm, 83f, 113f);
+				} else if (this.max_range == 20) {
+					// first segment : 30sec
+					draw_position_trend_vector_segment(g2, turn_radius, turn_speed, pixels_per_nm, 0f, 30f);
+					// second segment : 60sec
+					draw_position_trend_vector_segment(g2, turn_radius, turn_speed, pixels_per_nm, 40f, 70f);
+				} else if (this.max_range <= 10) {
+					// first segment : 30sec
+					draw_position_trend_vector_segment(g2, turn_radius, turn_speed, pixels_per_nm, 0f, 27f);
+				}
+			}				
 		}
+		
 		g2.setTransform(original_trans);
 		
-		float turn_speed = turn_speed_averager.running_average(this.xpd.yaw_rotation()); // turn speed in deg/s
-		float turn_radius = turn_radius(turn_speed, this.xpd.groundspeed()); // turn radius in nm
-		
-		if(this.map_mode || this.map_ctr_mode) {
-	        if (this.max_range > 20) {
-	            // first segment : 30sec
-	           draw_position_trend_vector_segment(g2, turn_radius, turn_speed, pixels_per_nm, 0f, 23f);
-	            // second segment : 60sec
-	           draw_position_trend_vector_segment(g2, turn_radius, turn_speed, pixels_per_nm, 38f, 68f);
-	            // third segment : 90sec
-	           draw_position_trend_vector_segment(g2, turn_radius, turn_speed, pixels_per_nm, 83f, 113f);
-	        } else if (this.max_range == 20) {
-	            // first segment : 30sec
-	           draw_position_trend_vector_segment(g2, turn_radius, turn_speed, pixels_per_nm, 0f, 30f);
-	            // second segment : 60sec
-	           draw_position_trend_vector_segment(g2, turn_radius, turn_speed, pixels_per_nm, 40f, 70f);
-	        } else if(this.max_range <= 10) {
-	            // first segment : 30sec
-	        	draw_position_trend_vector_segment(g2, turn_radius, turn_speed, pixels_per_nm, 0f, 27f);
-	        }
-		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -2243,7 +2274,7 @@ public class ND2 extends DUBaseClass {
 		if(this.pln_mode) {
 			map_clip.setArcByCenter(this.map_center_x, this.map_center_y, 425f * gc.scaling_factor, 0f, 360f, Arc2D.CHORD);
 		} else {
-			map_clip.setArcByCenter(this.map_center_x, this.map_center_y, 670f * gc.scaling_factor, 0f, 360f, Arc2D.CHORD);
+			map_clip.setArcByCenter(this.map_center_x, this.map_center_y, 760f * gc.scaling_factor, 0f, 360f, Arc2D.CHORD);
 		}
 		
 		g2.clip(map_clip);
@@ -2276,18 +2307,8 @@ public class ND2 extends DUBaseClass {
 			}			
 		}
 		
-		// display cdu fixes			
-		for(int i = 0; i < 5; i++) {				
-			if(this.xpd.fix_show(pilot)[i]) {
-				map_projection.setPoint(this.xpd.fix_lat()[i], this.xpd.fix_lon()[i]);
-				float cdufix_x = map_projection.getX();
-				float cdufix_y = map_projection.getY();
-				drawCduFix(cdufix_x, cdufix_y, this.xpd.fix_type()[i], this.xpd.fix_id(pilot)[i]);
-				displayFixRings(i, cdufix_x, cdufix_y);
-				displayFixRadials(i, cdufix_x, cdufix_y);						
-			}				
-		}
-					
+		boolean[] cdufix_drawn = {false,false,false,false,false};
+						
 		// display runway fixes
 		for(int i = 0; i < 5; i++) {
 			if(this.xpd.fix_show(pilot)[i]) {
@@ -2296,8 +2317,7 @@ public class ND2 extends DUBaseClass {
 					if (!this.xpd.dest_arpt().isEmpty()) { // no active flight plan
 						NavigationObject dest_runway_fix = nor.get_runway(this.xpd.dest_arpt(), dest_runway, dest.lat, dest.lon, false);
 						if(dest_runway_fix != null) {
-							Runway rwy = (Runway) dest_runway_fix;
-				
+							Runway rwy = (Runway) dest_runway_fix;				
 							if(rwy != null) {
 								if(dest_runway.equals(rwy.rwy_num1)) {
 									map_projection.setPoint(rwy.lat1, rwy.lon1);
@@ -2309,11 +2329,24 @@ public class ND2 extends DUBaseClass {
 								drawCduFix(cdufix_x, cdufix_y, 4, this.xpd.fix_id(pilot)[i]);
 								displayFixRings(i, cdufix_x, cdufix_y);
 								displayFixRadials(i, cdufix_x, cdufix_y);
+								cdufix_drawn[i] = true;
 							}
 						}
 					}
 				}
 			}
+		}
+		
+		// display cdu fixes			
+		for(int i = 0; i < 5; i++) {				
+			if(this.xpd.fix_show(pilot)[i] && !cdufix_drawn[i]) {
+				map_projection.setPoint(this.xpd.fix_lat()[i], this.xpd.fix_lon()[i]);
+				float cdufix_x = map_projection.getX();
+				float cdufix_y = map_projection.getY();
+				drawCduFix(cdufix_x, cdufix_y, this.xpd.fix_type()[i], this.xpd.fix_id(pilot)[i]);
+				displayFixRings(i, cdufix_x, cdufix_y);
+				displayFixRadials(i, cdufix_x, cdufix_y);						
+			}				
 		}
 
 		g2.setTransform(main_map);
@@ -2585,7 +2618,7 @@ public class ND2 extends DUBaseClass {
 		NavigationObject navobj = null;
 		RadioNavBeacon rnb = null;
 
-		float min_rwy = 1700f;
+		float min_rwy = Float.parseFloat(this.preferences.get_preference(ZHSIPreferences.PREF_ARPT_MIN_RWY_LENGTH));
 
 		for (int i = 0; i < nav_objects.size(); i++) {
 			navobj = nav_objects.get(i);
@@ -2756,7 +2789,6 @@ public class ND2 extends DUBaseClass {
 
 		// backgrounds
 		temp_trans = g2.getTransform();
-		//g2.setColor(Color.ORANGE);
 		g2.setColor(Color.BLACK);
 		g2.scale(gc.scalex, gc.scaley);
 		if (vor1_efis_pos != 0) {
@@ -2926,16 +2958,17 @@ public class ND2 extends DUBaseClass {
 
 	private void drawCompassRose() {
 
-		String heading_track = "TRK";
+		String heading_track;
 		compass_rotate = 0f;
 		heading_bug_rotate = 0f;
 		current_heading_bug_rotate = 0f;
 		String display_heading;
 
-		if (this.map_mode || this.map_ctr_mode) {
+		if ((this.map_mode || this.map_ctr_mode) && this.xpd.track_up() == 1) {
 			display_heading = gc.df3.format(this.xpd.track());
 			compass_rotate = this.xpd.track() * -1;
-			heading_bug_rotate = this.xpd.mcp_hdg() - this.xpd.track(); 
+			heading_bug_rotate = this.xpd.mcp_hdg() - this.xpd.track();
+			heading_track = "TRK";
 			current_heading_bug_rotate = this.xpd.heading(pilot) - this.xpd.track();
 			track_line_rotate = 0f;
 		} else {
@@ -2958,7 +2991,7 @@ public class ND2 extends DUBaseClass {
 			g2.translate(this.map_center_x, 0);
 			g2.scale(gc.scalex, gc.scaley);
 			g2.setColor(Color.BLACK);
-			g2.fillRect(-120, 10 + heading_box_offset , 240, 60);
+			g2.fillRect(-125, 8 + heading_box_offset , 245, 60);
 			g2.setColor(gc.color_markings);
 			g2.setStroke(new BasicStroke(4f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND));
 			int[] trackBox_xPoints = {-60, -60, 60, 60};
@@ -3322,7 +3355,7 @@ public class ND2 extends DUBaseClass {
 		if (this.xpd.irs_aligned() && !this.pln_mode) {
 			
 			int radius = -758;
-			if(isMapCenter) {
+			if (isMapCenter) {
 				radius = -380;
 			}
 			g2.setColor(gc.color_magenta);
@@ -3331,11 +3364,10 @@ public class ND2 extends DUBaseClass {
 			g2.scale(gc.scalex, gc.scaley);
 			g2.setStroke(stroke4);
 			int[] xpoints = {-27, 27, 27, 12, 0, -12, -27};
-			int[] ypoints = {radius, radius, radius -20, radius - 20, radius, radius - 20, radius - 20};
+			int[] ypoints = {radius, radius, radius - 20, radius - 20, radius, radius - 20, radius - 20};
 			g2.drawPolygon(xpoints, ypoints, 7);
 			g2.setStroke(heading_bug_line);
-			if(this.xpd.hdg_bug_line(pilot)) {
-				
+			if (this.xpd.hdg_bug_line(pilot)) {			
 				g2.drawLine(0, 0, 0, radius);
 			}
 			g2.setTransform(original_trans);
@@ -3513,7 +3545,6 @@ public class ND2 extends DUBaseClass {
 						}
 						gc.drawText2(gc.dme_formatter.format(this.xpd.fpln_nav_id_dist()), 967, 925, 32, 0, gc.color_markings, false, "right", g2);
 						gc.drawText2("NM", 970, 925, 24, 0, gc.color_markings, false, "left", g2);
-
 					}
 				}
 			}
@@ -3754,9 +3785,9 @@ public class ND2 extends DUBaseClass {
 		g2.scale(gc.scalex, gc.scaley);
 		g2.setColor(Color.BLACK);
 		if((this.xpd.efis_apt_mode(pilot) || this.xpd.efis_wpt_mode(pilot) || this.xpd.efis_sta_mode(pilot)) && (this.map_mode || this.map_ctr_mode || this.pln_mode)) {
-			int[] xpoints = {0, 80, 0};
-			int[] ypoints = {662, 662, 630};
-			g2.fillPolygon(xpoints, ypoints, xpoints.length); //ARPT WPT STA
+			//int[] xpoints = {0, 80, 0};
+			//int[] ypoints = {662, 662, 630};
+			//g2.fillPolygon(xpoints, ypoints, xpoints.length); //ARPT WPT STA
 			g2.fillRect(0, 660, 80, 85); // ARPT WPT STA
 		}
 		if(this.xpd.efis_terr_on(pilot) || this.xpd.efis_wxr_on(pilot)) {
@@ -3926,7 +3957,6 @@ public class ND2 extends DUBaseClass {
 			}
 		}
 
-
 		this.rose_radius = 758f * gc.scaley;
 
 		// get tuned radios
@@ -4031,7 +4061,7 @@ public class ND2 extends DUBaseClass {
 
 		// get map orientation
 	
-		if (this.xpd.map_mode_map(pilot)) {
+		if (this.xpd.map_mode_map(pilot) && this.xpd.track_up() == 1) {
 			if (this.xpd.on_gound()) {
 				this.map_up = ((int) this.xpd.track() - this.xpd.magnetic_variation()) * -1;
 			} else {
@@ -4346,19 +4376,21 @@ public class ND2 extends DUBaseClass {
 	}
 	
 	private void draw_position_trend_vector_segment(Graphics2D g2, float turn_radius, float turn_speed, float pixels_per_nm, float vector_start, float vector_end) {
-		
+
 		g2.scale(gc.scalex, gc.scaley);
 		g2.setStroke(rs.stroke3);
 		g2.setTransform(original_trans);
+		g2.translate(this.map_center_x, this.map_center_y);
+		g2.rotate(Math.toRadians(track_line_rotate), 0, 0);
 		g2.setColor(rs.color_markings);
 				
 		float turn_radius_pixels = turn_radius * this.pixels_per_nm;
-			
+	
 		if (turn_speed >= 0) {
 			// right turn
 			g2.draw(new Arc2D.Float(
-					this.map_center_x,
-					this.map_center_y - turn_radius_pixels - (10f * gc.scaley),
+					0,
+					0 - turn_radius_pixels - (10f * gc.scaley),
 					turn_radius_pixels * 2f,
 					turn_radius_pixels * 2f,
 					180.0f - (vector_end * turn_speed),
@@ -4366,9 +4398,9 @@ public class ND2 extends DUBaseClass {
 					Arc2D.OPEN));
 		} else {
 			// left turn
-			g2.draw(new Arc2D.Float(
-					this.map_center_x - (turn_radius_pixels * 2.0f),
-					this.map_center_y - turn_radius_pixels - (10f * gc.scaley),
+			g2.draw(new Arc2D.Float(			
+					0 - (turn_radius_pixels * 2f),
+					0 - turn_radius_pixels - (10f * gc.scaley),
 					turn_radius_pixels * 2f,
 					turn_radius_pixels * 2f,
 					vector_start * Math.abs(turn_speed),

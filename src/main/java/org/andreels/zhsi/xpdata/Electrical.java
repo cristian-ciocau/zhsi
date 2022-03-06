@@ -34,6 +34,7 @@ public class Electrical extends BaseDataClass {
 	private final String AC_VOLT_VALUE = "laminar/B738/ac_volt_value";
 	private final String DC_AMP_VALUE  = "laminar/B738/dc_amp_value";
 	private final String DC_VOLT_VALUE = "laminar/B738/dc_volt_value";
+	private final String BATTERY_ON = "sim/cockpit2/electrical/battery_on";
 	
 	public int standby_bat_pos = 0;
 	public float ac_freq_value = 0;
@@ -41,6 +42,7 @@ public class Electrical extends BaseDataClass {
 	public float ac_volt_value = 0;
 	public float dc_amp_value  = 0;
 	public float dc_volt_value = 0;
+	public int[] battery_on = new int[8];
 	
 	public Electrical(ExtPlaneInterface iface) {
 		
@@ -52,6 +54,7 @@ public class Electrical extends BaseDataClass {
 		this.drefs.add(AC_VOLT_VALUE);
 		this.drefs.add(DC_AMP_VALUE);
 		this.drefs.add(DC_VOLT_VALUE);
+		this.drefs.add(BATTERY_ON);
 		
 		electrical = new Observer<DataRef>() {
 
@@ -70,6 +73,8 @@ public class Electrical extends BaseDataClass {
 				case DC_AMP_VALUE: dc_amp_value = Float.parseFloat(object.getValue()[0]);
 				break;
 				case DC_VOLT_VALUE: dc_volt_value = Float.parseFloat(object.getValue()[0]);
+				break;
+				case BATTERY_ON: battery_on[0] = Integer.parseInt(object.getValue()[0]);
 				break;
 				}
 				

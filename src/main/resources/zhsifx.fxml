@@ -286,7 +286,6 @@
                               </Pane>
                               <JFXToggleButton fx:id="hardwareThrottle" layoutY="36.0" onAction="#updateOptions" text="Enable Hardware Throttle Indicator" AnchorPane.leftAnchor="0.0" />
                               <JFXToggleButton fx:id="stabTrim" layoutX="281.0" layoutY="36.0" onAction="#updateOptions" text="Enable Stab Trim Indicator" AnchorPane.leftAnchor="281.0" />
-                              <JFXToggleButton fx:id="compactEngine" layoutY="110.0" onAction="#updateOptions" text="Enable Compact Engine Display" AnchorPane.leftAnchor="0.0" />
 							  <JFXToggleButton fx:id="rudderTrim" layoutX="281.0" layoutY="110.0" onAction="#updateOptions" text="Enable Rudder Trim Indicator" AnchorPane.leftAnchor="281.0" />
                            </children>
                         </AnchorPane>

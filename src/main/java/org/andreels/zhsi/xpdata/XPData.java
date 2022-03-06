@@ -153,6 +153,9 @@ public interface XPData {
 	public int time_local_min();
 	public int time_day();
 	public int time_month();
+	public int chrono_variant();
+	public int year();
+	public int clock_display_dmy(String pilot);
 	public int chrono_mode(String pilot);
 	public float chrono_needle(String pilot);
 	public int chrono_minute(String pilot);
@@ -226,6 +229,7 @@ public interface XPData {
 	public float rnp();
 	public float vrnp();
 	public float xtrack_nd();
+	public float vnav_decel_hold_dist();
 	public int trans_alt();
 	public int trans_lvl();
 	public String active_waypoint();
@@ -338,6 +342,7 @@ public interface XPData {
 	public float dir_seg3_radius();
 	public int dir_seg3_turn();
 	public float gp_err_pfd();
+	public int track_up();
 	public float fms_track();
 	
 	// navdata
@@ -485,16 +490,14 @@ public interface XPData {
 	public float fuel_qty_lbs_1();
 	public float fuel_qty_lbs_2();
 	public float fuel_qty_lbs_c();
-	public float fuel_flow1();
-	public float fuel_flow2();
+	public float fuel_flow_dspl_1();
+	public float fuel_flow_dspl_2();
 	public float n1_percent1();
 	public float n1_percent2();
 	public boolean eng_start_value_1();
 	public boolean eng_start_value_2();
 	public boolean eng_oil_bypass_1();
 	public boolean eng_oil_bypass_2();
-	public boolean oil_pressure_annun_1();
-	public boolean oil_pressure_annun_2();
 	public float oil_qty_1();
 	public float oil_qty_2();
 	public float oil_temp_c_1();
@@ -539,10 +542,15 @@ public interface XPData {
 	public int dc_power_knob();
 	
 	// systems
-	public boolean mfd_eng();
-	public boolean mfd_sys();
+	public int lowerdu_page();
+	public int lowerdu_page2();
 	public boolean sim_paused();
 	public int rel_gls();
+	public int flight_control();
+	public int brake_temp();
+	public int gs_on_pfd();
+	public int gpws_test_running();
+	public int ff_eicas();
 	public float brake_temp_left_in();
 	public float brake_temp_left_out();
 	public float brake_temp_right_in();
@@ -586,6 +594,7 @@ public interface XPData {
 	public float ac_amp_value();
 	public float dc_volt_value();
 	public float dc_amp_value();
+	public int battery_on();
 
 	// other
 	public float rough_distance_to(NavigationObject nav_object);
