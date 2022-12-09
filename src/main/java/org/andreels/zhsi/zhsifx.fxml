@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXSlider?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" styleClass="root" stylesheets="@zhsifx.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.andreels.zhsi.ZHSIController">
+   <children>
+      <AnchorPane prefHeight="600.0" prefWidth="200.0" styleClass="side-bar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Pane layoutX="79.0" prefHeight="80.0" prefWidth="121.0" style="-fx-background-color: #404040;" AnchorPane.leftAnchor="79.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Label layoutX="23.0" text="ZHSI" textFill="#5fbfd8">
+                     <font>
+                        <Font size="40.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lblVersion" layoutX="67.0" layoutY="48.0" text="v2.2.0" textFill="#bcbcbc">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+            <JFXButton fx:id="btnDash" layoutY="120.0" onMouseReleased="#buttonAction" prefHeight="50.0" prefWidth="200.0" text="DashBoard" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+            <JFXButton fx:id="btnDu" layoutY="170.0" onMouseReleased="#buttonAction" prefHeight="50.0" prefWidth="200.0" text="DU Displays" />
+            <JFXButton fx:id="btnInst" layoutY="220.0" onMouseReleased="#buttonAction" prefHeight="50.0" prefWidth="200.0" text="Gauges / Instruments" />
+            <JFXButton fx:id="btnAnnunciators" layoutY="270.0" onAction="#buttonAction" onMouseReleased="#buttonAction" prefHeight="50.0" prefWidth="200.0" text="Annunciators" />
+            <JFXButton fx:id="btnOptions" layoutY="320.0" onMouseReleased="#buttonAction" prefHeight="50.0" prefWidth="200.0" text="Options" />
+            <JFXButton fx:id="btnSettings" layoutY="370.0" onMouseReleased="#buttonAction" prefHeight="50.0" prefWidth="200.0" text="Settings" />
+            <JFXButton fx:id="btnLog" layoutY="420.0" onMouseReleased="#buttonAction" prefHeight="50.0" prefWidth="200.0" text="Log" />
+            <JFXButton fx:id="btnAbout" layoutY="470.0" onMouseReleased="#buttonAction" prefHeight="50.0" prefWidth="200.0" text="About" />
+            <Label layoutX="36.0" layoutY="80.0" text="for Zibo737 (X-Plane 11)" textFill="#aeaeae" AnchorPane.leftAnchor="36.0" />
+            <ImageView fitHeight="80.0" fitWidth="83.0" pickOnBounds="true" preserveRatio="true" styleClass="logo_image" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <Label layoutX="10.0" layoutY="540.0" text="Java Max Memory:" textFill="#aeaeae" AnchorPane.leftAnchor="10.0" />
+            <Label fx:id="lblMaxMem" layoutX="115.0" layoutY="541.0" maxWidth="75.0" prefWidth="75.0" text="0" textAlignment="CENTER" textFill="RED" AnchorPane.leftAnchor="115.0" AnchorPane.rightAnchor="15.0" />
+         </children>
+      </AnchorPane>
+      <Pane layoutX="200.0" prefHeight="600.0" prefWidth="8.0" style="-fx-background-color: #5FBFD8;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="0.0" />
+      <AnchorPane layoutX="208.0" layoutY="500.0" prefHeight="30.0" styleClass="status-bar" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="208.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <Circle fx:id="roundLedWeatherStatus" centerY="15.0" fill="#1fff54" onMouseEntered="#ledMouseEntered" onMouseExited="#ledMouseExited" radius="8.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.rightAnchor="10.0" />
+            <Circle fx:id="roundLedTerrainStatus" centerY="15.0" fill="#ff1f1f" onMouseEntered="#ledMouseEntered" onMouseExited="#ledMouseExited" radius="8.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.rightAnchor="30.0" />
+            <Circle fx:id="roundLedNavStatus" centerY="15.0" fill="#1fff54" onMouseEntered="#ledMouseEntered" onMouseExited="#ledMouseExited" radius="8.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.rightAnchor="50.0" />
+            <Circle fx:id="roundLedZiboStatus" centerY="15.0" fill="#ffa31f" onMouseEntered="#ledMouseEntered" onMouseExited="#ledMouseExited" radius="8.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.rightAnchor="70.0" />
+            <Circle fx:id="roundLedXPStatus" centerY="15.0" fill="#ff1f1f" onMouseEntered="#ledMouseEntered" onMouseExited="#ledMouseExited" radius="8.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.rightAnchor="90.0" />
+            <Label fx:id="statusBarText" layoutX="14.0" layoutY="6.0" styleClass="about-text-area" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="6.0" />
+         </children>
+      </AnchorPane>
+      <Pane layoutX="208.0" prefHeight="80.0" prefWidth="692.0" styleClass="header-bar" AnchorPane.leftAnchor="208.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label fx:id="paneHeading" layoutX="14.0" styleClass="header" text="DashBoard" />
+            <Label fx:id="paneSubHeading" layoutX="14.0" layoutY="48.0" styleClass="sub-header" text="ZHSI DashBoard" />
+         </children>
+      </Pane>
+      <StackPane layoutX="208.0" layoutY="80.0" prefHeight="483.0" prefWidth="692.0" style="-fx-background-color: #404040;" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="208.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="80.0">
+         <children>
+            <ScrollPane fx:id="dashPane" fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0" visible="false">
+              <content>
+                <AnchorPane prefHeight="482.0" prefWidth="589.0">
+                     <children>
+                        <AnchorPane layoutY="5.0" prefHeight="70.0" prefWidth="563.0" styleClass="box" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                           <children>
+                              <Pane prefHeight="35.0" prefWidth="664.0" styleClass="box-header" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label layoutX="14.0" layoutY="6.0" styleClass="box-header-text" text="Nearest Airport" />
+                                 </children>
+                              </Pane>
+                              <Label fx:id="lblNearestAirportValue" layoutX="14.0" layoutY="44.0" styleClass="about-text-area" text="Error: X-Plane not connected" AnchorPane.leftAnchor="14.0" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutY="85.0" prefHeight="70.0" prefWidth="563.0" styleClass="box" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0">
+                           <children>
+                              <Pane prefHeight="35.0" prefWidth="664.0" styleClass="box-header" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label layoutX="40.0" layoutY="6.0" styleClass="box-header-text" text="X-Plane Status" />
+                                    <Rectangle fx:id="ledXPStatus" arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f" height="15.0" layoutX="14.0" layoutY="9.0" stroke="BLACK" strokeType="INSIDE" width="15.0" />
+                                 </children>
+                              </Pane>
+                              <Label fx:id="lblXplaneStatusBox" layoutY="44.0" styleClass="about-text-area" text="X-Plane not connected" AnchorPane.leftAnchor="14.0" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutY="165.0" prefHeight="70.0" prefWidth="564.0" styleClass="box" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                           <children>
+                              <Pane prefHeight="35.0" prefWidth="664.0" styleClass="box-header" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label layoutX="40.0" layoutY="6.0" styleClass="box-header-text" text="Zibo Status" />
+                                    <Rectangle fx:id="ledZiboStatus" arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f" height="15.0" layoutX="14.0" layoutY="9.0" stroke="BLACK" strokeType="INSIDE" width="15.0" />
+                                 </children>
+                              </Pane>
+                              <Label fx:id="lblZiboStatusBox" layoutX="14.0" layoutY="44.0" styleClass="about-text-area" text="Zibo not loaded" AnchorPane.leftAnchor="14.0" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutY="245.0" prefHeight="70.0" prefWidth="564.0" styleClass="box" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                           <children>
+                              <Pane prefHeight="35.0" prefWidth="664.0" styleClass="box-header" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label layoutX="40.0" layoutY="6.0" styleClass="box-header-text" text="Nav DB Status" />
+                                    <Rectangle fx:id="ledNavStatus" arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f" height="15.0" layoutX="14.0" layoutY="9.0" stroke="BLACK" strokeType="INSIDE" width="15.0" />
+                                 </children>
+                              </Pane>
+                              <Label fx:id="lblNavStatusBox" layoutX="14.0" layoutY="44.0" styleClass="about-text-area" text="Nav DB not loaded" AnchorPane.leftAnchor="14.0" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutY="325.0" prefHeight="70.0" prefWidth="564.0" styleClass="box" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                           <children>
+                              <Pane layoutX="1.6" prefHeight="34.0" prefWidth="563.0" styleClass="box-header" AnchorPane.bottomAnchor="36.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label layoutX="40.0" layoutY="6.0" styleClass="box-header-text" text="Terrain DB Status" />
+                                    <Rectangle fx:id="ledTerrainStatus" arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f" height="15.0" layoutX="14.0" layoutY="9.0" stroke="BLACK" strokeType="INSIDE" width="15.0" />
+                                 </children>
+                              </Pane>
+                              <Label fx:id="lblTerrainStatusBox" layoutX="14.0" layoutY="44.0" styleClass="about-text-area" text="Terrain GLOBE tiles not loaded" AnchorPane.leftAnchor="14.0" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutY="405.0" prefHeight="70.0" prefWidth="564.0" styleClass="box" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                           <children>
+                              <Pane layoutX="1.6" prefHeight="34.0" prefWidth="563.0" styleClass="box-header" AnchorPane.bottomAnchor="36.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label layoutX="40.0" layoutY="6.0" styleClass="box-header-text" text="Weather Status" />
+                                    <Rectangle fx:id="ledWeatherStatus" arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f" height="15.0" layoutX="14.0" layoutY="9.0" stroke="BLACK" strokeType="INSIDE" width="15.0" />
+                                 </children>
+                              </Pane>
+                              <Label fx:id="lblWeatherStatusBox" layoutX="14.0" layoutY="44.0" styleClass="about-text-area" text="Not receiving weather" AnchorPane.leftAnchor="14.0" />
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+              </content>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ScrollPane>
+            <ScrollPane fx:id="duPane" fitToHeight="true" fitToWidth="true" visible="false">
+              <content>
+                <AnchorPane>
+                     <children>
+                        <AnchorPane layoutY="5.0" prefHeight="100.0" prefWidth="563.0" styleClass="box" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                           <children>
+                              <Pane prefHeight="35.0" prefWidth="664.0" styleClass="box-header" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label layoutX="14.0" layoutY="6.0" styleClass="box-header-text" text="Captain" />
+                                 </children>
+                              </Pane>
+                              <JFXToggleButton fx:id="cptOutBdToggle" layoutY="36.0" onAction="#toggleDu" text="OutBoard DU" AnchorPane.leftAnchor="0.0" />
+                              <JFXToggleButton fx:id="cptInBdToggle" layoutX="282.0" layoutY="36.0" onAction="#toggleDu" text="InBoard DU" AnchorPane.leftAnchor="282.0" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutY="115.0" prefHeight="100.0" prefWidth="564.0" styleClass="box" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                           <children>
+                              <Pane prefHeight="35.0" prefWidth="664.0" styleClass="box-header" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label layoutX="14.0" layoutY="6.0" styleClass="box-header-text" text="First Officer" />
+                                 </children>
+                              </Pane>
+                              <JFXToggleButton fx:id="foOutBdToggle" layoutY="36.0" onAction="#toggleDu" text="OutBoard DU" AnchorPane.leftAnchor="0.0" />
+                              <JFXToggleButton fx:id="foInBdToggle" layoutX="282.0" layoutY="36.0" onAction="#toggleDu" text="InBoard DU" AnchorPane.leftAnchor="282.0" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutY="225.0" prefHeight="100.0" prefWidth="564.0" styleClass="box" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                           <children>
+                              <Pane prefHeight="35.0" prefWidth="664.0" styleClass="box-header" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label layoutX="14.0" layoutY="6.0" styleClass="box-header-text" text="EICAS" />
+                                 </children>
+                              </Pane>
+                              <JFXToggleButton fx:id="upperEicasToggle" layoutY="36.0" onAction="#toggleDu" text="Upper (Engine)" AnchorPane.leftAnchor="0.0" />
+                              <JFXToggleButton fx:id="lowerEicasToggle" layoutX="282.0" layoutY="36.0" onAction="#toggleDu" text="Lower (MFD)" AnchorPane.leftAnchor="282.0" />
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </ScrollPane>
+            <ScrollPane fx:id="instPane" fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0" visible="false">
+              <content>
+                <AnchorPane>
+                     <children>
+                        <AnchorPane layoutY="5.0" prefHeight="200.0" prefWidth="564.0" styleClass="box" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                           <children>
+                              <Pane prefHeight="35.0" prefWidth="664.0" styleClass="box-header" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label layoutX="14.0" layoutY="6.0" styleClass="box-header-text" text="MIP" />
+                                 </children>
+                              </Pane>
+                              <JFXToggleButton fx:id="isfdToggle" layoutY="36.0" onAction="#toggleInstrument" text="ISFD" AnchorPane.leftAnchor="0.0" />
+                              <JFXToggleButton fx:id="flapToggle" layoutX="282.0" layoutY="36.0" onAction="#toggleInstrument" text="Flaps" AnchorPane.leftAnchor="282.0" />
+                              <JFXToggleButton fx:id="cptChronoToggle" layoutY="96.0" onAction="#toggleInstrument" text="Captain Chrono" AnchorPane.leftAnchor="0.0" />
+                              <JFXToggleButton fx:id="foChronoToggle" layoutX="282.0" layoutY="96.0" onAction="#toggleInstrument" text="First Officer Chrono" AnchorPane.leftAnchor="282.0" />
+                              <JFXToggleButton fx:id="rmiToggle" layoutY="156.0" onAction="#toggleInstrument" text="Standby RMI" AnchorPane.leftAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutY="225.0" prefHeight="250.0" prefWidth="564.0" styleClass="box" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                           <children>
+                              <Pane prefHeight="35.0" prefWidth="664.0" styleClass="box-header" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label layoutX="14.0" layoutY="6.0" styleClass="box-header-text" text="Overhead" />
+                                 </children>
+                              </Pane>
+                              <JFXToggleButton fx:id="elecToggle" layoutY="36.0" onAction="#toggleInstrument" text="Electrical Display" AnchorPane.leftAnchor="0.0" />
+                              <JFXToggleButton fx:id="irsToggle" layoutX="282.0" layoutY="36.0" onAction="#toggleInstrument" text="IRS Display" AnchorPane.leftAnchor="282.0" />
+                              <JFXToggleButton fx:id="fltaltToggle" layoutY="96.0" onAction="#toggleInstrument" text="Flt Alt Display" AnchorPane.leftAnchor="0.0" />
+                              <JFXToggleButton fx:id="landaltToggle" layoutX="282.0" layoutY="96.0" onAction="#toggleInstrument" text="Land Alt Display" AnchorPane.leftAnchor="282.0" />
+                              <Label layoutX="14.0" layoutY="150.0" styleClass="log-text-area" text="Adjust the sliders below to fine the X pixel locations of the Electrical Display readouts" />                          
+                              <Label layoutX="14.0" layoutY="175.0" styleClass="log-text-area" text="DC Volts" AnchorPane.leftAnchor="14.0" />
+                              <Label layoutX="13.0" layoutY="195.0" styleClass="log-text-area" text="DC Amps" AnchorPane.leftAnchor="14.0" />
+                              <Label layoutX="15.0" layoutY="215.0" styleClass="log-text-area" text="AC Volts" AnchorPane.leftAnchor="14.0" />
+                              <Label layoutX="13.0" layoutY="235.0" styleClass="log-text-area" text="AC Amps" AnchorPane.leftAnchor="14.0" />
+                              <Label layoutX="14.0" layoutY="255.0" styleClass="log-text-area" text="CPS Freq" AnchorPane.leftAnchor="14.0" />
+                               <JFXSlider fx:id="dcVoltsXslider" layoutX="78.0" layoutY="177.0" max="120.0" min="20.0" prefHeight="14.0" prefWidth="225.0" AnchorPane.leftAnchor="80.0" />
+                              <JFXSlider fx:id="dcAmpsXslider" layoutX="85.0" layoutY="197.0" max="120.0" min="20.0" prefHeight="14.0" prefWidth="225.0" AnchorPane.leftAnchor="80.0" />
+                              <JFXSlider fx:id="acVoltsXslider" layoutX="85.0" layoutY="217.0" max="410.0" min="310.0" prefHeight="14.0" prefWidth="225.0" AnchorPane.leftAnchor="80.0" />
+                              <JFXSlider fx:id="acAmpsXslider" layoutX="85.0" layoutY="237.0" max="260.0" min="160.0" prefHeight="14.0" prefWidth="225.0" AnchorPane.leftAnchor="80.0" />
+                              <JFXSlider fx:id="cpsFreqXslider" layoutX="85.0" layoutY="257.0" max="410.0" min="310.0" prefHeight="14.0" prefWidth="225.0" AnchorPane.leftAnchor="80.0" />
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </ScrollPane>
+            <ScrollPane fx:id="optionsPane" fitToHeight="true" fitToWidth="true" layoutX="10.0" layoutY="10.0" visible="false">
+               <content>
+                  <AnchorPane>
+                     <children>
+                        <AnchorPane layoutY="5.0" prefHeight="150.0" prefWidth="562.0" styleClass="box" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                           <children>
+                              <Pane prefHeight="35.0" prefWidth="664.0" styleClass="box-header" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label layoutX="14.0" layoutY="6.0" styleClass="box-header-text" text="General" />
+                                 </children>
+                              </Pane>
+                              <JFXToggleButton fx:id="startUIMinimized" layoutY="36.0" onAction="#updateOptions" text="Start App Window Minimized" AnchorPane.leftAnchor="0.0" />
+                              <JFXToggleButton fx:id="duAlwaysOnTop" layoutX="282.0" layoutY="36.0" onAction="#updateOptions" text="DU Displays (Always On Top)" AnchorPane.leftAnchor="282.0" />
+                              <JFXToggleButton fx:id="showFPS" layoutY="96.0" onAction="#toggleShowFPS" text="Show DU Frames Per Second" AnchorPane.leftAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutY="170.0" prefHeight="150.0" prefWidth="562.0" styleClass="box" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                           <children>
+                              <Pane prefHeight="35.0" prefWidth="664.0" styleClass="box-header" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label layoutX="14.0" layoutY="6.0" styleClass="box-header-text" text="Fuel" />
+                                 </children>
+                              </Pane>
+                              <JFXToggleButton fx:id="fuelInKgs" layoutY="36.0" onAction="#updateOptions" text="Fuel Units in KGS (Default: LBS)" AnchorPane.leftAnchor="0.0" />
+                              <JFXToggleButton fx:id="fuelDisplay" layoutY="100.0" onAction="#updateOptions" text="Over Under Fuel Display (Default: Side-by-Side)" AnchorPane.leftAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutY="340.0" prefHeight="100.0" prefWidth="562.0" styleClass="box" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                           <children>
+                              <Pane prefHeight="35.0" prefWidth="664.0" styleClass="box-header" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label layoutX="14.0" layoutY="6.0" styleClass="box-header-text" text="PFD" />
+                                 </children>
+                              </Pane>
+                              <JFXToggleButton fx:id="roundAltimeter" layoutY="36.0" onAction="#updateOptions" text="Round Altimeter (Default: AoA)" AnchorPane.leftAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutY="450.0" prefHeight="100.0" prefWidth="562.0" styleClass="box" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                           <children>
+                              <Pane prefHeight="35.0" prefWidth="664.0" styleClass="box-header" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label layoutX="14.0" layoutY="6.0" styleClass="box-header-text" text="ND" />
+                                 </children>
+                              </Pane>
+                              <JFXToggleButton fx:id="enableXraas" layoutY="36.0" onAction="#updateOptions" text="Enable X-RAAS Messages (Requires X-RAAS2 plugin)" AnchorPane.leftAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutX="14.0" layoutY="560.0" prefHeight="150.0" prefWidth="562.0" styleClass="box" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                           <children>
+                              <Pane prefHeight="35.0" prefWidth="664.0" styleClass="box-header" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label layoutX="14.0" layoutY="6.0" styleClass="box-header-text" text="Upper EICAS" />
+                                 </children>
+                              </Pane>
+                              <JFXToggleButton fx:id="hardwareThrottle" layoutY="36.0" onAction="#updateOptions" text="Enable Hardware Throttle Indicator" AnchorPane.leftAnchor="0.0" />
+                              <JFXToggleButton fx:id="stabTrim" layoutX="281.0" layoutY="36.0" onAction="#updateOptions" text="Enable Stab Trim Indicator" AnchorPane.leftAnchor="281.0" />
+							  <JFXToggleButton fx:id="rudderTrim" layoutX="281.0" layoutY="110.0" onAction="#updateOptions" text="Enable Rudder Trim Indicator" AnchorPane.leftAnchor="281.0" />
+                           </children>
+                        </AnchorPane>
+                     </children></AnchorPane>
+               </content>
+            </ScrollPane>
+            <ScrollPane fx:id="settingsPane" fitToHeight="true" fitToWidth="true" layoutX="10.0" layoutY="10.0" visible="false">
+               <content>
+                  <AnchorPane>
+                     <children>
+                        <AnchorPane layoutY="5.0" prefHeight="90.0" prefWidth="562.0" styleClass="box" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                           <children>
+                              <Pane prefHeight="35.0" prefWidth="664.0" styleClass="box-header" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label layoutX="14.0" layoutY="6.0" styleClass="box-header-text" text="X-Plane PC IP Address" />
+                                 </children>
+                              </Pane>
+                              <JFXTextField fx:id="txtXPIp" focusColor="#66ccff" layoutX="14.0" layoutY="50.0" prefHeight="25.0" prefWidth="390.0" promptText="X-Plane PC IP Address" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="155.0" />
+                              <JFXButton fx:id="btnXPIp" layoutX="420.0" layoutY="43.0" onAction="#applyIPAddress" prefWidth="130.0" styleClass="button_small" text="Apply" AnchorPane.rightAnchor="22.0" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutX="14.0" layoutY="105.0" prefHeight="90.0" prefWidth="562.0" styleClass="box" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                           <children>
+                              <Pane prefHeight="35.0" prefWidth="664.0" styleClass="box-header" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label layoutX="14.0" layoutY="6.0" styleClass="box-header-text" text="X-Plane Directory Path" />
+                                 </children>
+                              </Pane>
+                              <JFXTextField fx:id="txtXPDir" editable="false" focusColor="#66ccff" layoutX="14.0" layoutY="50.0" prefHeight="25.0" prefWidth="390.0" promptText="X-Plane Directory Path" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="155.0" />
+                              <JFXButton fx:id="btnBrowseXP" layoutX="420.0" layoutY="43.0" onAction="#browseXP" prefWidth="130.0" styleClass="button_small" text="Browse" AnchorPane.rightAnchor="22.0" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutX="14.0" layoutY="205.0" prefHeight="90.0" prefWidth="562.0" styleClass="box" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
+                           <children>
+                              <Pane prefHeight="35.0" prefWidth="664.0" styleClass="box-header" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label layoutX="14.0" layoutY="6.0" styleClass="box-header-text" text="GLOBE Tiles Directory Path" />
+                                 </children>
+                              </Pane>
+                              <JFXTextField fx:id="txtEGPWSDir" editable="false" focusColor="#66ccff" layoutX="14.0" layoutY="50.0" prefHeight="25.0" prefWidth="390.0" promptText="GLOBE Tiles Directory Path" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="155.0" />
+                              <JFXButton fx:id="btnBrowseEgpws" layoutX="420.0" layoutY="43.0" onAction="#browseEgpws" prefWidth="130.0" styleClass="button_small" text="Browse" AnchorPane.rightAnchor="22.0" />
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </ScrollPane>
+            <ScrollPane fx:id="logPane" fitToHeight="true" fitToWidth="true" layoutX="10.0" layoutY="10.0" visible="false">
+               <content>
+                  <AnchorPane>
+                     <children>
+                        <TextArea fx:id="logTextArea" editable="false" prefHeight="200.0" prefWidth="200.0" promptText="ZHSI Log File" styleClass="log-text-area" wrapText="true" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="40.0" />
+                        <JFXButton fx:id="btnLogRefresh" layoutX="440.0" layoutY="1.0" onAction="#buttonAction" styleClass="button_small" text="Refresh" AnchorPane.rightAnchor="30.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </ScrollPane>
+            <ScrollPane fx:id="aboutPane" fitToHeight="true" fitToWidth="true" layoutX="10.0" layoutY="10.0" visible="false">
+               <content>
+                  <AnchorPane>
+                     <children>
+                        <TextArea fx:id="txtAreaAbout" editable="false" prefHeight="200.0" prefWidth="200.0" styleClass="about-text-area" wrapText="true" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </ScrollPane>
+            <ScrollPane fx:id="annunPane" fitToHeight="true" fitToWidth="true" layoutX="10.0" layoutY="10.0">
+               <content>
+                  <AnchorPane>
+                     <children>
+                        <TextArea fx:id="annunTextArea" prefHeight="200.0" prefWidth="200.0" promptText="Annunciators Config File" styleClass="log-text-area" wrapText="true" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="100.0" />
+                        <JFXButton fx:id="btnAnnunSave" layoutX="440.0" layoutY="13.0" onAction="#buttonAction" styleClass="button_small" text="Save" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="13.0" />
+                        <JFXButton fx:id="btnAnnunRefresh" layoutX="295.0" layoutY="13.0" onAction="#buttonAction" styleClass="button_small" text="Refresh" AnchorPane.rightAnchor="175.0" AnchorPane.topAnchor="13.0" />
+                        <JFXToggleButton fx:id="annunWindow" layoutX="14.0" onAction="#updateOptions" text="Enable Annunciator Window" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="0.0" />
+                        <Label layoutX="14.0" layoutY="66.0" text="Please see the ZHSI Wiki for more information and instructions" textFill="#e93333" AnchorPane.leftAnchor="14.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </ScrollPane>
+         </children>
+      </StackPane>
+   </children>
+</AnchorPane>
