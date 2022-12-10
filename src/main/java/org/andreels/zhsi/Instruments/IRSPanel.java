@@ -27,6 +27,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 
 import org.andreels.zhsi.ModelFactory;
+import org.andreels.zhsi.ZHSIPreferences;
 
 public class IRSPanel extends InstrumentBaseClass {
 
@@ -34,9 +35,11 @@ public class IRSPanel extends InstrumentBaseClass {
 	
 	private Font irsFont = rs.irsPanelFont.deriveFont(40f);
 	private FontMetrics fm;
-	private Color irsColor = new Color(0xff8000);
 
-		
+	private Color irs_color = new Color(Integer.valueOf(this.preferences.get_preference(ZHSIPreferences.PREF_IRS_COLOR).substring(2,4),16),
+										Integer.valueOf(this.preferences.get_preference(ZHSIPreferences.PREF_IRS_COLOR).substring(4,6),16),
+										Integer.valueOf(this.preferences.get_preference(ZHSIPreferences.PREF_IRS_COLOR).substring(6,8),16));
+
 	public IRSPanel(ModelFactory model_factory, String title, String pilot) {
 		super(model_factory, title, pilot);
 		// TODO Auto-generated constructor stub
@@ -49,7 +52,7 @@ public class IRSPanel extends InstrumentBaseClass {
 		if(this.xpd.power_on()) {
 			
 			g2.scale(this.scalex, this.scaley);
-			g2.setColor(irsColor);
+			g2.setColor(irs_color);
 			g2.setFont(irsFont);
 			fm = g2.getFontMetrics(irsFont);
 

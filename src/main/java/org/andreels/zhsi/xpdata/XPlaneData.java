@@ -143,6 +143,10 @@ public class XPlaneData implements XPData {
 		return this.xpdrepo.systems.gs_on_pfd;
 	}
 	
+	public int single_cue_fd() {
+		return this.xpdrepo.systems.single_cue_fd;
+	}
+
 	public int gpws_test_running() {
 		return this.xpdrepo.systems.gpws_test_running;
 	}
@@ -2032,8 +2036,8 @@ public class XPlaneData implements XPData {
 		return this.xpdrepo.systems.xraas_color;
 	}
 
-	public boolean windsheer() {
-		return (this.xpdrepo.systems.windsheer != 0);
+	public boolean windshear() {
+		return (this.xpdrepo.systems.windshear != 0);
 	}
 
 	public boolean pullup() {
@@ -2171,6 +2175,18 @@ public class XPlaneData implements XPData {
 		return this.xpdrepo.fms.legs_bypass;
 	}
 	
+	public float[] legs_offset() {
+		return this.xpdrepo.fms.legs_offset;
+	}
+
+	public float[] legs_offset_lat() {
+		return this.xpdrepo.fms.legs_offset_lat;
+	}
+
+	public float[] legs_offset_lon() {
+		return this.xpdrepo.fms.legs_offset_lon;
+	}
+
 	public int num_of_wpts() {
 		return this.xpdrepo.fms.num_of_wpts;
 	}
@@ -2317,6 +2333,18 @@ public class XPlaneData implements XPData {
 	
 	public float[] mod_legs_type() {
 		return this.xpdrepo.fms.legs_type_2;
+	}
+
+	public float[] mod_legs_offset() {
+		return this.xpdrepo.fms.legs_offset_2;
+	}
+
+	public float[] mod_legs_offset_lat() {
+		return this.xpdrepo.fms.legs_offset_lat_2;
+	}
+
+	public float[] mod_legs_offset_lon() {
+		return this.xpdrepo.fms.legs_offset_lon_2;
 	}
 
 	public int pfd_mode(String pilot) {
@@ -2577,6 +2605,46 @@ public class XPlaneData implements XPData {
 	@Override
 	public int track_up() {
 		return this.xpdrepo.fms.track_up;
+	}
+
+	@Override
+	public int assum_temp_show() {
+		return this.xpdrepo.fms.assum_temp_show;
+	}
+
+	@Override
+	public int fmc_sel_temp() {
+		return this.xpdrepo.fms.fmc_sel_temp;
+	}
+
+	@Override
+	public int legs_offset_act() {
+		return this.xpdrepo.fms.legs_offset_act;
+	}
+
+	@Override
+	public int legs_offset_act_mod() {
+		return this.xpdrepo.fms.legs_offset_act_mod;
+	}
+
+	@Override
+	public int legs_offset_start() {
+		return this.xpdrepo.fms.legs_offset_start;
+	}
+
+	@Override
+	public int legs_offset_start_mod() {
+		return this.xpdrepo.fms.legs_offset_start_mod;
+	}
+
+	@Override
+	public int legs_offset_end() {
+		return this.xpdrepo.fms.legs_offset_end;
+	}
+
+	@Override
+	public int legs_offset_end_mod() {
+		return this.xpdrepo.fms.legs_offset_end_mod;
 	}
 
 	@Override

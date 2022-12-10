@@ -96,6 +96,14 @@ public class FMS extends BaseDataClass {
 	private final String APPROACH_FLAPS = "laminar/B738/FMS/approach_flaps";
 	private final String APPROACH_SPEED = "laminar/B738/FMS/approach_speed";
 	private final String TRACK_UP = "laminar/B738/fms/track_up";
+	private final String ASSUM_TEMP_SHOW = "laminar/B738/eicas/assum_temp_show";
+	private final String FMC_SEL_TEMP = "laminar/B738/FMS/fmc_sel_temp";
+	private final String LEGS_OFFSET_ACT = "laminar/B738/fms/legs_offset_act";
+	private final String LEGS_OFFSET_ACT_MOD = "laminar/B738/fms/legs_offset_act_mod";
+	private final String LEGS_OFFSET_START = "laminar/B738/fms/legs_offset_start";
+	private final String LEGS_OFFSET_START_MOD = "laminar/B738/fms/legs_offset_start_mod";
+	private final String LEGS_OFFSET_END = "laminar/B738/fms/legs_offset_end";
+	private final String LEGS_OFFSET_END_MOD = "laminar/B738/fms/legs_offset_end_mod";
 	
 	public float anp;
 	public float vanp;
@@ -160,6 +168,14 @@ public class FMS extends BaseDataClass {
 	public float fms_track = 0f;
 	public float gp_err_pfd = 0f;
 	public int track_up = 0;
+	public int assum_temp_show = 0;
+	public int fmc_sel_temp = 0;
+	public int legs_offset_act = 0;
+	public int legs_offset_act_mod = 0;
+	public int legs_offset_start = 0;
+	public int legs_offset_start_mod = 0;
+	public int legs_offset_end = 0;
+	public int legs_offset_end_mod = 0;
 	
 	//fms active route lnav curves
 	
@@ -182,6 +198,9 @@ public class FMS extends BaseDataClass {
 	private final String LEGS_AF_BEG = "laminar/B738/fms/legs_af_beg"; //[128]
 	private final String LEGS_AF_END = "laminar/B738/fms/legs_af_end"; //[128]
 	private final String LEGS_BYPASS = "laminar/B738/fms/legs_bypass"; //[128]
+	private final String LEGS_OFFSET = "laminar/B738/fms/legs_offset"; //[128]
+	private final String LEGS_OFFSET_LAT = "laminar/B738/fms/legs_offset_lat"; //[128]
+	private final String LEGS_OFFSET_LON = "laminar/B738/fms/legs_offset_lon"; //[128]
 	
 	public float[] legs_rad_lat = new float[128];
 	public float[] legs_rad_lon = new float[128];
@@ -202,6 +221,10 @@ public class FMS extends BaseDataClass {
 	public float[] legs_af_beg = new float[128];
 	public float[] legs_af_end = new float[128];
 	public float[] legs_bypass = new float[128];
+	public float[] legs_offset = new float[128];
+	public float[] legs_offset_lat = new float[128];
+	public float[] legs_offset_lon = new float[128];
+
 	
 	//fms active route
 	
@@ -258,6 +281,9 @@ public class FMS extends BaseDataClass {
 	private final String LEGS_RAD_TURN_2 = "laminar/B738/fms/legs_rad_turn_2"; //[128]
 	private final String LEGS_TYPE_2 = "laminar/B738/fms/legs_type_2"; // 0 waypoint, 5 is flyover waypoint
 	private final String NUM_OF_WPTS_2 = "laminar/B738/fms/num_of_wpts_2";
+	private final String LEGS_OFFSET_2 = "laminar/B738/fms/legs_offset_2"; //[128]
+	private final String LEGS_OFFSET_LAT_2 = "laminar/B738/fms/legs_offset_lat_2"; //[128]
+	private final String LEGS_OFFSET_LON_2 = "laminar/B738/fms/legs_offset_lon_2"; //[128]
 	
 	public int num_of_wpts_2 = 0;
 	public String[] waypoints_2;
@@ -277,6 +303,9 @@ public class FMS extends BaseDataClass {
 	public float[] legs_rad_lon_2 = new float[128];
 	public float[] legs_rad_turn_2 = new float[128];
 	public float[] legs_type_2 = new float[128];
+	public float[] legs_offset_2 = new float[128];
+	public float[] legs_offset_lat_2 = new float[128];
+	public float[] legs_offset_lon_2 = new float[128];
 		
 	public FMS(ExtPlaneInterface iface) {
 		super(iface);
@@ -426,6 +455,30 @@ public class FMS extends BaseDataClass {
 					break;
 				case TRACK_UP:
 					track_up = Integer.parseInt(object.getValue()[0]);
+					break;
+				case ASSUM_TEMP_SHOW:
+					assum_temp_show = Integer.parseInt(object.getValue()[0]);
+					break;
+				case FMC_SEL_TEMP:
+					fmc_sel_temp = Integer.parseInt(object.getValue()[0]);
+					break;
+				case LEGS_OFFSET_ACT:
+					legs_offset_act = Integer.parseInt(object.getValue()[0]);
+					break;
+				case LEGS_OFFSET_ACT_MOD:
+					legs_offset_act_mod = Integer.parseInt(object.getValue()[0]);
+					break;
+				case LEGS_OFFSET_START:
+					legs_offset_start = Integer.parseInt(object.getValue()[0]);
+					break;
+				case LEGS_OFFSET_START_MOD:
+					legs_offset_start_mod = Integer.parseInt(object.getValue()[0]);
+					break;
+				case LEGS_OFFSET_END:
+					legs_offset_end = Integer.parseInt(object.getValue()[0]);
+					break;
+				case LEGS_OFFSET_END_MOD:
+					legs_offset_end_mod = Integer.parseInt(object.getValue()[0]);
 					break;
 				}
 				
@@ -593,7 +646,22 @@ public class FMS extends BaseDataClass {
 					for(int i = 0; i < 128; i++) {
 						legs_bypass[i] = Float.parseFloat(object.getValue()[i]);
 					}
-					break;	
+					break;
+				case LEGS_OFFSET:
+					for(int i = 0; i < 128; i++) {
+						legs_offset[i] = Float.parseFloat(object.getValue()[i]);
+					}
+					break;
+				case LEGS_OFFSET_LAT:
+					for(int i = 0; i < 128; i++) {
+						legs_offset_lat[i] = Float.parseFloat(object.getValue()[i]);
+					}
+					break;
+				case LEGS_OFFSET_LON:
+					for(int i = 0; i < 128; i++) {
+						legs_offset_lon[i] = Float.parseFloat(object.getValue()[i]);
+					}
+					break;
 				case LEGS:
 					byte[] legsByte = Base64.getDecoder().decode(object.getValue()[0]);
 					String decodedString = new String(legsByte);
@@ -756,6 +824,21 @@ public class FMS extends BaseDataClass {
 						legs_type_2[i] = Float.parseFloat(object.getValue()[i]);
 					}
 					break;
+				case LEGS_OFFSET_2:
+					for(int i = 0; i < 128; i++) {
+						legs_offset_2[i] = Float.parseFloat(object.getValue()[i]);
+					}
+					break;
+				case LEGS_OFFSET_LAT_2:
+					for(int i = 0; i < 128; i++) {
+						legs_offset_lat_2[i] = Float.parseFloat(object.getValue()[i]);
+					}
+					break;
+				case LEGS_OFFSET_LON_2:
+					for(int i = 0; i < 128; i++) {
+						legs_offset_lon_2[i] = Float.parseFloat(object.getValue()[i]);
+					}
+					break;
 				}
 				
 			}
@@ -820,6 +903,14 @@ public class FMS extends BaseDataClass {
 		iface.includeDataRef(DIR_SEG3_TURN, 0.1f);
 		iface.includeDataRef(GP_ERR_PFD, 1f);
 		iface.includeDataRef(TRACK_UP);
+		iface.includeDataRef(ASSUM_TEMP_SHOW);
+		iface.includeDataRef(FMC_SEL_TEMP);
+		iface.includeDataRef(LEGS_OFFSET_ACT);
+		iface.includeDataRef(LEGS_OFFSET_ACT_MOD);
+		iface.includeDataRef(LEGS_OFFSET_START);
+		iface.includeDataRef(LEGS_OFFSET_START_MOD);
+		iface.includeDataRef(LEGS_OFFSET_END);
+		iface.includeDataRef(LEGS_OFFSET_END_MOD);
 		
 		iface.observeDataRef(ANP, fms_data);
 		iface.observeDataRef(VANP, fms_data);
@@ -863,6 +954,14 @@ public class FMS extends BaseDataClass {
 		iface.observeDataRef(DIR_SEG3_TURN, fms_data);
 		iface.observeDataRef(GP_ERR_PFD, fms_data);
 		iface.observeDataRef(TRACK_UP, fms_data);
+		iface.observeDataRef(ASSUM_TEMP_SHOW, fms_data);
+		iface.observeDataRef(FMC_SEL_TEMP, fms_data);
+		iface.observeDataRef(LEGS_OFFSET_ACT, fms_data);
+		iface.observeDataRef(LEGS_OFFSET_ACT_MOD, fms_data);
+		iface.observeDataRef(LEGS_OFFSET_START, fms_data);
+		iface.observeDataRef(LEGS_OFFSET_START_MOD, fms_data);
+		iface.observeDataRef(LEGS_OFFSET_END, fms_data);
+		iface.observeDataRef(LEGS_OFFSET_END_MOD, fms_data);
 		
 		for(int i = 0; i < 2; i++) {
 			iface.includeDataRef(FPLN_ACTIVE[i]);
@@ -920,6 +1019,9 @@ public class FMS extends BaseDataClass {
 		iface.includeDataRef(LEGS_AF_BEG, 0.001f);
 		iface.includeDataRef(LEGS_AF_END, 0.001f);
 		iface.includeDataRef(LEGS_BYPASS, 0.1f);
+		iface.includeDataRef(LEGS_OFFSET, 0.1f);
+		iface.includeDataRef(LEGS_OFFSET_LAT);
+		iface.includeDataRef(LEGS_OFFSET_LON);
 		
 		iface.observeDataRef(LEGS_RAD_LAT, active_route);
 		iface.observeDataRef(LEGS_RAD_LON, active_route);
@@ -940,6 +1042,9 @@ public class FMS extends BaseDataClass {
 		iface.observeDataRef(LEGS_AF_BEG, active_route);
 		iface.observeDataRef(LEGS_AF_END, active_route);
 		iface.observeDataRef(LEGS_BYPASS, active_route);
+		iface.observeDataRef(LEGS_OFFSET, active_route);
+		iface.observeDataRef(LEGS_OFFSET_LAT, active_route);
+		iface.observeDataRef(LEGS_OFFSET_LON, active_route);
 		
 		iface.includeDataRef(LEGS);
 		iface.includeDataRef(LEGS_LAT);
@@ -986,6 +1091,9 @@ public class FMS extends BaseDataClass {
 		iface.includeDataRef(LEGS_RAD_LON_2);
 		iface.includeDataRef(LEGS_RAD_TURN_2);
 		iface.includeDataRef(LEGS_TYPE_2);
+		iface.includeDataRef(LEGS_OFFSET_2, 0.1f);
+		iface.includeDataRef(LEGS_OFFSET_LAT_2);
+		iface.includeDataRef(LEGS_OFFSET_LON_2);
 
 		iface.observeDataRef(LEGS_2, modified_route);
 		iface.observeDataRef(LEGS_LAT_2, modified_route);
@@ -1002,6 +1110,9 @@ public class FMS extends BaseDataClass {
 		iface.observeDataRef(LEGS_RAD_LON_2, modified_route);
 		iface.observeDataRef(LEGS_RAD_TURN_2, modified_route);
 		iface.observeDataRef(LEGS_TYPE_2, modified_route);
+		iface.observeDataRef(LEGS_OFFSET_2, modified_route);
+		iface.observeDataRef(LEGS_OFFSET_LAT_2, modified_route);
+		iface.observeDataRef(LEGS_OFFSET_LON_2, modified_route);
 		
 	}
 
@@ -1055,6 +1166,14 @@ public class FMS extends BaseDataClass {
 		iface.excludeDataRef(DIR_SEG3_TURN);
 		iface.excludeDataRef(GP_ERR_PFD);
 		iface.excludeDataRef(TRACK_UP);
+		iface.excludeDataRef(ASSUM_TEMP_SHOW);
+		iface.excludeDataRef(FMC_SEL_TEMP);
+		iface.excludeDataRef(LEGS_OFFSET_ACT);
+		iface.excludeDataRef(LEGS_OFFSET_ACT_MOD);
+		iface.excludeDataRef(LEGS_OFFSET_START);
+		iface.excludeDataRef(LEGS_OFFSET_START_MOD);
+		iface.excludeDataRef(LEGS_OFFSET_END);
+		iface.excludeDataRef(LEGS_OFFSET_END_MOD);
 		
 		iface.unObserveDataRef(ANP, fms_data);
 		iface.unObserveDataRef(VANP, fms_data);
@@ -1098,7 +1217,15 @@ public class FMS extends BaseDataClass {
 		iface.unObserveDataRef(DIR_SEG3_TURN, fms_data);
 		iface.unObserveDataRef(GP_ERR_PFD, fms_data);
 		iface.unObserveDataRef(TRACK_UP, fms_data);
-		
+		iface.unObserveDataRef(ASSUM_TEMP_SHOW, fms_data);
+		iface.unObserveDataRef(FMC_SEL_TEMP, fms_data);
+		iface.unObserveDataRef(LEGS_OFFSET_ACT, fms_data);
+		iface.unObserveDataRef(LEGS_OFFSET_ACT_MOD, fms_data);
+		iface.unObserveDataRef(LEGS_OFFSET_START, fms_data);
+		iface.unObserveDataRef(LEGS_OFFSET_START_MOD, fms_data);
+		iface.unObserveDataRef(LEGS_OFFSET_END, fms_data);
+		iface.unObserveDataRef(LEGS_OFFSET_END_MOD, fms_data);
+
 		for(int i = 0; i < 2; i++) {
 			iface.excludeDataRef(FPLN_ACTIVE[i]);
 			iface.unObserveDataRef(FPLN_ACTIVE[i], fms_data);
@@ -1155,6 +1282,9 @@ public class FMS extends BaseDataClass {
 		iface.excludeDataRef(LEGS_AF_BEG);
 		iface.excludeDataRef(LEGS_AF_END);
 		iface.excludeDataRef(LEGS_BYPASS);
+		iface.excludeDataRef(LEGS_OFFSET);
+		iface.excludeDataRef(LEGS_OFFSET_LAT);
+		iface.excludeDataRef(LEGS_OFFSET_LON);
 
 		iface.unObserveDataRef(LEGS_RAD_LAT, active_route);
 		iface.unObserveDataRef(LEGS_RAD_LON, active_route);
@@ -1175,6 +1305,9 @@ public class FMS extends BaseDataClass {
 		iface.unObserveDataRef(LEGS_AF_BEG, active_route);
 		iface.unObserveDataRef(LEGS_AF_END, active_route);
 		iface.unObserveDataRef(LEGS_BYPASS, active_route);
+		iface.unObserveDataRef(LEGS_OFFSET, active_route);
+		iface.unObserveDataRef(LEGS_OFFSET_LAT, active_route);
+		iface.unObserveDataRef(LEGS_OFFSET_LON, active_route);
 		
 		iface.excludeDataRef(LEGS);
 		iface.excludeDataRef(LEGS_LAT);
@@ -1221,6 +1354,9 @@ public class FMS extends BaseDataClass {
 		iface.excludeDataRef(LEGS_RAD_LON_2);
 		iface.excludeDataRef(LEGS_RAD_TURN_2);
 		iface.excludeDataRef(LEGS_TYPE_2);
+		iface.excludeDataRef(LEGS_OFFSET_2);
+		iface.excludeDataRef(LEGS_OFFSET_LAT_2);
+		iface.excludeDataRef(LEGS_OFFSET_LON_2);
 
 		iface.unObserveDataRef(LEGS_2, modified_route);
 		iface.unObserveDataRef(LEGS_LAT_2, modified_route);
@@ -1237,6 +1373,9 @@ public class FMS extends BaseDataClass {
 		iface.unObserveDataRef(LEGS_RAD_LON_2, modified_route);
 		iface.unObserveDataRef(LEGS_RAD_TURN_2, modified_route);
 		iface.unObserveDataRef(LEGS_TYPE_2, modified_route);
+		iface.unObserveDataRef(LEGS_OFFSET_2, modified_route);
+		iface.unObserveDataRef(LEGS_OFFSET_LAT_2, modified_route);
+		iface.unObserveDataRef(LEGS_OFFSET_LON_2, modified_route);
 		
 	}
 }

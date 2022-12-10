@@ -285,6 +285,9 @@ public interface XPData {
 	public float[] legs_af_beg();
 	public float[] legs_af_end();
 	public float[] legs_bypass();
+	public float[] legs_offset();
+	public float[] legs_offset_lat();
+	public float[] legs_offset_lon();
 	//active waypoint data
 	public int num_of_wpts();
 	public String[] waypoints();
@@ -324,6 +327,9 @@ public interface XPData {
 	public float[] mod_legs_rad_lon();
 	public float[] mod_legs_rad_turn();
 	public float[] mod_legs_type();
+	public float[] mod_legs_offset();
+	public float[] mod_legs_offset_lat();
+	public float[] mod_legs_offset_lon();
 	public int ils_disable();
 
 	public boolean intdir_act();
@@ -343,6 +349,14 @@ public interface XPData {
 	public int dir_seg3_turn();
 	public float gp_err_pfd();
 	public int track_up();
+	public int assum_temp_show();
+	public int fmc_sel_temp();
+	public int legs_offset_act();
+	public int legs_offset_act_mod();
+	public int legs_offset_start();
+	public int legs_offset_start_mod();
+	public int legs_offset_end();
+	public int legs_offset_end_mod();
 	public float fms_track();
 	
 	// navdata
@@ -549,6 +563,7 @@ public interface XPData {
 	public int flight_control();
 	public int brake_temp();
 	public int gs_on_pfd();
+	public int single_cue_fd();
 	public int gpws_test_running();
 	public int ff_eicas();
 	public float brake_temp_left_in();
@@ -575,7 +590,7 @@ public interface XPData {
 	public float flaps_r_deflection();
 	public String xraas_message();
 	public int xraas_color();
-	public boolean windsheer();
+	public boolean windshear();
 	public boolean pullup();
 	public float thr_lvr1();
 	public float thr_lvr2();

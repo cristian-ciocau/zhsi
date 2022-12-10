@@ -51,10 +51,9 @@ public class RMI extends InstrumentBaseClass {
 	private Font topFont;
 	private Font hdgFont;
 	
-	public Color rmi_color = new Color(
-						Integer.valueOf(this.preferences.get_preference(ZHSIPreferences.PREF_RMI_COLOR).substring(2,4),16),
-						Integer.valueOf(this.preferences.get_preference(ZHSIPreferences.PREF_RMI_COLOR).substring(4,6),16),
-						Integer.valueOf(this.preferences.get_preference(ZHSIPreferences.PREF_RMI_COLOR).substring(6,8),16));
+	private Color rmi_color	= new Color(Integer.valueOf(this.preferences.get_preference(ZHSIPreferences.PREF_RMI_COLOR).substring(2,4),16),
+										Integer.valueOf(this.preferences.get_preference(ZHSIPreferences.PREF_RMI_COLOR).substring(4,6),16),
+										Integer.valueOf(this.preferences.get_preference(ZHSIPreferences.PREF_RMI_COLOR).substring(6,8),16));
 	
 	private int[] x_points = {0, -8, 8};
 	private int[] y_points = {-200, -230, -230};

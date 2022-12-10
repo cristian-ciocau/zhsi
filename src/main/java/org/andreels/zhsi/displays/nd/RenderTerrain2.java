@@ -54,7 +54,7 @@ public class RenderTerrain2 extends Component {
 	private LoadResources rs;
 	private ElevationRepository elevRepository;
 	private NavigationObjectRepository nor;
-	private ZHSIPreferences preferences;
+	private ZHSIPreferences preferences = ZHSIPreferences.getInstance();
 	private Projection map_projection;
 	private XPData xpd;
 	private String pilot;
@@ -86,8 +86,12 @@ public class RenderTerrain2 extends Component {
 	TexturePaint terrain_green_text;
 	Ellipse2D terrain_dots = new Ellipse2D.Float();
 
-	public BufferedImage img_terrain1 = new BufferedImage(1029, 1011, BufferedImage.TYPE_INT_ARGB);
-	public BufferedImage img_terrain2 = new BufferedImage(1029, 1011, BufferedImage.TYPE_INT_ARGB);
+	public BufferedImage img_terrain1 = new BufferedImage(Integer.parseInt(this.preferences.get_preference(ZHSIPreferences.PREF_TERRAIN_WEATHER_BUFFEREDIMAGE_X)),
+															Integer.parseInt(this.preferences.get_preference(ZHSIPreferences.PREF_TERRAIN_WEATHER_BUFFEREDIMAGE_Y)),
+															BufferedImage.TYPE_INT_ARGB);
+	public BufferedImage img_terrain2 = new BufferedImage(Integer.parseInt(this.preferences.get_preference(ZHSIPreferences.PREF_TERRAIN_WEATHER_BUFFEREDIMAGE_X)),
+															Integer.parseInt(this.preferences.get_preference(ZHSIPreferences.PREF_TERRAIN_WEATHER_BUFFEREDIMAGE_Y)),
+															BufferedImage.TYPE_INT_ARGB);
 	Graphics2D terrain1 = img_terrain1.createGraphics();
 	Graphics2D terrain2 = img_terrain2.createGraphics();
 
@@ -114,7 +118,8 @@ public class RenderTerrain2 extends Component {
 
 		this.center_lat = this.xpd.latitude();
 		this.center_lon = this.xpd.longitude();
-		this.map_projection.setCenter(1029 / 2, 1011 / 2);
+		this.map_projection.setCenter(Integer.parseInt(this.preferences.get_preference(ZHSIPreferences.PREF_TERRAIN_WEATHER_BUFFEREDIMAGE_X)) / 2,
+										Integer.parseInt(this.preferences.get_preference(ZHSIPreferences.PREF_TERRAIN_WEATHER_BUFFEREDIMAGE_Y)) / 2);
 		this.map_projection.setAcf(this.center_lat, this.center_lon);
 		this.map_projection.setScale(pixels_per_nm);
 		int size;
@@ -197,7 +202,8 @@ public class RenderTerrain2 extends Component {
 		peak_max = 0f;
 		peak_min= 8500f;
 
-		terrain.clearRect(0, 0, 1029, 1011);
+		terrain.clearRect(0, 0, Integer.parseInt(this.preferences.get_preference(ZHSIPreferences.PREF_TERRAIN_WEATHER_BUFFEREDIMAGE_X)),
+								Integer.parseInt(this.preferences.get_preference(ZHSIPreferences.PREF_TERRAIN_WEATHER_BUFFEREDIMAGE_Y)));
 
 		for (float lat=lat_min; lat<= lat_max; lat+=lat_step) {
 			for (float lon=lon_min; lon<=lon_max; lon+=lon_step) {

@@ -171,6 +171,8 @@ public class LoadResources extends JPanel {
 //	public BufferedImage img_pitchMarkings;
 	public BufferedImage img_aircraftWings;
 	public BufferedImage img_aircraftNose;
+	public BufferedImage img_fd2_1;
+	public BufferedImage img_wings2_1;
 	public BufferedImage img_speedBug;
 	public BufferedImage img_altBug;
 	public BufferedImage img_hdef_dots;
@@ -337,6 +339,8 @@ public class LoadResources extends JPanel {
 //			img_pitchMarkings = ImageIO.read(getClass().getResource("/pfd/img_pitchMarkings.png"));
 			img_aircraftWings = ImageIO.read(getClass().getResource("/pfd/img_aircraftWings.png"));
 			img_aircraftNose = ImageIO.read(getClass().getResource("/pfd/img_aircraftNose.png"));
+			img_fd2_1 = ImageIO.read(getClass().getResource("/pfd/img_fd2_1.png"));
+			img_wings2_1 = ImageIO.read(getClass().getResource("/pfd/img_wings2_1.png"));
 			img_speedBug = ImageIO.read(getClass().getResource("/pfd/img_speedBug.png"));
 			img_altBug = ImageIO.read(getClass().getResource("/pfd/img_altBug.png"));
 			img_hdef_dots = ImageIO.read(getClass().getResource("/pfd/img_hdef_dots.png"));
@@ -362,7 +366,7 @@ public class LoadResources extends JPanel {
 			img_horiz_nps_pointer = ImageIO.read(getClass().getResource("/pfd/img_horiz_nps_pointer.png"));
 			img_vert_nps_pointer = ImageIO.read(getClass().getResource("/pfd/img_vert_nps_pointer.png"));
 			img_slipIndicator = ImageIO.read(getClass().getResource("/pfd/img_slipIndicator.png"));
-			
+
 			//ND
 			img_nd_arpt = ImageIO.read(getClass().getResource("/nd/img_nd_arpt.png"));
 			img_nd_arpt_fix = ImageIO.read(getClass().getResource("/nd/img_nd_arpt_fix.png"));
@@ -422,12 +426,12 @@ public class LoadResources extends JPanel {
 			img_tcas_solid_diamond = ImageIO.read(getClass().getResource("/nd/img_tcas_solid_diamond.png"));
 			img_tcas_white_arrowdn = ImageIO.read(getClass().getResource("/nd/img_tcas_white_arrowdn.png"));
 			img_tcas_white_arrowup = ImageIO.read(getClass().getResource("/nd/img_tcas_white_arrowup.png"));
-			
+
 			//isfd
 			img_isfd_compass = ImageIO.read(getClass().getResource("/isfd/img_isfd_compass.png"));
 			img_isfd_wings = ImageIO.read(getClass().getResource("/isfd/img_isfd_wings.png"));
 			img_isfd_bank_pointer = ImageIO.read(getClass().getResource("/isfd/img_isfd_bank_pointer.png"));
-			
+
 			//failure msgs
 			img_alt_dis = ImageIO.read(getClass().getResource("/failureflags/img_alt_dis.png"));
 			img_att_fail = ImageIO.read(getClass().getResource("/failureflags/img_att_fail.png"));

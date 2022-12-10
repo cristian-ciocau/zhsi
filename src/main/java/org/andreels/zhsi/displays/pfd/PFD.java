@@ -373,24 +373,45 @@ public class PFD extends DUBaseClass {
 	private void drawPitchLimitIndication(Graphics2D g2) {
 		
 		if (this.xpd.irs_aligned()) {
-		
-			g2.setColor(gc.color_amber);
-			g2.scale(gc.scalex, gc.scaley);
-			g2.setStroke(rs.stroke4);
-			g2.drawLine(360, 390, 400, 390);
-			g2.drawLine(400, 390, 400, 400);
-			g2.setStroke(rs.stroke3);
-			g2.drawLine(395, 390, 385, 390 - (int)this.xpd.stall());
-			g2.drawLine(385, 390, 375, 390 - (int)this.xpd.stall());
-			g2.drawLine(375, 390, 365, 390 - (int)this.xpd.stall());
-			g2.setStroke(rs.stroke4);
-			g2.drawLine(570, 390, 610, 390);
-			g2.drawLine(570, 390, 570, 400);
-			g2.setStroke(rs.stroke3);
-			g2.drawLine(575, 390, 585, 390 - (int)this.xpd.stall());
-			g2.drawLine(585, 390, 595, 390 - (int)this.xpd.stall());
-			g2.drawLine(595, 390, 605, 390 - (int)this.xpd.stall());
-			g2.setTransform(original_trans);
+
+			if (this.xpd.single_cue_fd() == 1) {
+
+				g2.setColor(gc.color_amber);
+				g2.scale(gc.scalex, gc.scaley);
+				g2.setStroke(rs.stroke4);
+				g2.drawLine(445, 390, 485, 380);
+				g2.drawLine(485, 380, 525, 390);
+				g2.setStroke(rs.stroke3);
+				g2.drawLine(445, 390, 445, 390 - (int)this.xpd.stall());
+				g2.drawLine(458, 387, 458, 387 - (int)this.xpd.stall());
+				g2.drawLine(472, 383, 472, 383 - (int)this.xpd.stall());
+				g2.drawLine(485, 380, 485, 380 - (int)this.xpd.stall());
+				g2.drawLine(498, 383, 498, 383 - (int)this.xpd.stall());
+				g2.drawLine(512, 387, 512, 387 - (int)this.xpd.stall());
+				g2.drawLine(525, 390, 525, 390 - (int)this.xpd.stall());
+				g2.setTransform(original_trans);
+
+			} else {
+
+				g2.setColor(gc.color_amber);
+				g2.scale(gc.scalex, gc.scaley);
+				g2.setStroke(rs.stroke4);
+				g2.drawLine(360, 390, 400, 390);
+				g2.drawLine(400, 390, 400, 400);
+				g2.setStroke(rs.stroke3);
+				g2.drawLine(395, 390, 385, 390 - (int)this.xpd.stall());
+				g2.drawLine(385, 390, 375, 390 - (int)this.xpd.stall());
+				g2.drawLine(375, 390, 365, 390 - (int)this.xpd.stall());
+				g2.setStroke(rs.stroke4);
+				g2.drawLine(570, 390, 610, 390);
+				g2.drawLine(570, 390, 570, 400);
+				g2.setStroke(rs.stroke3);
+				g2.drawLine(575, 390, 585, 390 - (int)this.xpd.stall());
+				g2.drawLine(585, 390, 595, 390 - (int)this.xpd.stall());
+				g2.drawLine(595, 390, 605, 390 - (int)this.xpd.stall());
+				g2.setTransform(original_trans);
+
+			}
 			
 		}
 		
@@ -1407,24 +1428,25 @@ public class PFD extends DUBaseClass {
 		g2.setClip(original_clipshape);
 
 		g2.setColor(Color.WHITE);
+		if (this.xpd.airspeed_mach() >= 0.4f) {
+			gc.drawText("" + gc.mach_format.format(this.xpd.airspeed_mach()), 45, 85, 44, 0, 0, 0, "left", g2);
+		} else if (this.xpd.gs_on_pfd() == 1) {
+			gc.drawText("GS", 25, 85, 24, 0, 0, 0, "left", g2);
+			gc.drawText("" + gc.df3hash.format(this.xpd.groundspeed()), 135, 85, 44, 0, 0, 0, "right", g2);
+		}
+
 		if (this.xpd.gs_on_pfd() == 1) {
-			if (this.xpd.airspeed_mach() >= 0.4f) {
-				gc.drawText("" + gc.mach_format.format(this.xpd.airspeed_mach()), 45, 85, 44, 0, 0, 0, "left", g2);
-			} else {
-				gc.drawText("GS", 25, 85, 24, 0, 0, 0, "left", g2);
-				gc.drawText("" + gc.df3hash.format(this.xpd.groundspeed()), 135, 85, 44, 0, 0, 0, "right", g2);
+
+			if ((airspeed_mach_prev >= 0.4f && this.xpd.airspeed_mach() < 0.4f) || (airspeed_mach_prev < 0.4f && this.xpd.airspeed_mach() >= 0.4f)) {
+				time_plus_ten_seconds = System.currentTimeMillis() + 10000;
 			}
-		}
-		
-		if ((airspeed_mach_prev >= 0.4f && this.xpd.airspeed_mach() < 0.4f) || (airspeed_mach_prev < 0.4f && this.xpd.airspeed_mach() >= 0.4f)) {
-			time_plus_ten_seconds = System.currentTimeMillis() + 10000;
-		}
-		
-		if (System.currentTimeMillis() < time_plus_ten_seconds) {
-			g2.scale(gc.scalex, gc.scaley);
-			g2.setStroke(gc.stroke_four);
-			g2.drawRect(20, 923, 130, 50);
-			g2.setTransform(original_trans);
+
+			if (System.currentTimeMillis() < time_plus_ten_seconds) {
+				g2.scale(gc.scalex, gc.scaley);
+				g2.setStroke(gc.stroke_four);
+				g2.drawRect(20, 923, 130, 50);
+				g2.setTransform(original_trans);
+			}
 		}
 		
 		airspeed_mach_prev = this.xpd.airspeed_mach();
@@ -1777,8 +1799,8 @@ public class PFD extends DUBaseClass {
 			gc.displayImage(rs.img_ldg_alt_fail, 0, 970, 145, g2);
 		}
 			
-		if(this.xpd.windsheer()) {
-			gc.drawText2("WINDSHEER", 490, 190 , 44, 0, gc.color_red, true, "center", g2);
+		if(this.xpd.windshear()) {
+			gc.drawText2("WINDSHEAR", 490, 190 , 44, 0, gc.color_red, true, "center", g2);
 		}
 		if(this.xpd.pullup()) {
 			gc.drawText2("PULL UP", 490, 190 , 44, 0, gc.color_red, true, "center", g2);
@@ -2374,7 +2396,11 @@ public class PFD extends DUBaseClass {
 			g2.setTransform(original_trans);
 		}
 
-		gc.displayImage(rs.img_aircraftWings, 0, 262.366f, 490.525f, g2);
+		if (this.xpd.single_cue_fd() == 1) {
+			gc.displayImage(rs.img_wings2_1, 0, 271, 484, g2);
+		} else {
+			gc.displayImage(rs.img_aircraftWings, 0, 262.366f, 490.525f, g2);
+		}
 		
 		// tcas resolution advisories
 			
@@ -2412,39 +2438,55 @@ public class PFD extends DUBaseClass {
 		
 		// flight directors
 
-		if(this.xpd.irs_aligned() && this.xpd.fd_mode()) {
+		if (this.xpd.irs_aligned() && this.xpd.fd_mode()) {
 
-			g2.setStroke(new BasicStroke(11f * gc.scaling_factor));
+			if (this.xpd.single_cue_fd() == 1) {
 
-			g2.scale(gc.scalex, gc.scaley);
-			g2.translate(485, 527);
-			g2.setColor(gc.color_magenta);
+				if(this.xpd.fd_pitch_show(pilot) && this.xpd.fd_roll_show(pilot)) {
 
-			if(this.xpd.fd_pitch_show(pilot)) {
-				float y_delta = (this.xpd.pitch() - this.xpd.ap_fd_pitch_deg()) * 11.18f;
-				fd_hor_bar.setLine(-160f, y_delta, 160f, y_delta);
-				g2.draw(fd_hor_bar);
+					float y_delta = (this.xpd.pitch() - this.xpd.ap_fd_pitch_deg()) * 11.18f;
+					float x_delta = (-this.xpd.roll() + this.xpd.ap_fd_roll_deg());
+					gc.displayImage(rs.img_fd2_1, x_delta, 271 - x_delta, 479 - y_delta, g2);
+
+				}
+
+			} else {
+
+				g2.setStroke(new BasicStroke(11f * gc.scaling_factor));
+
+				g2.scale(gc.scalex, gc.scaley);
+				g2.translate(485, 527);
+				g2.setColor(gc.color_magenta);
+
+				if(this.xpd.fd_pitch_show(pilot)) {
+					float y_delta = (this.xpd.pitch() - this.xpd.ap_fd_pitch_deg()) * 11.18f;
+					fd_hor_bar.setLine(-160f, y_delta, 160f, y_delta);
+					g2.draw(fd_hor_bar);
+				}
+
+				if(this.xpd.fd_roll_show(pilot)) {
+					float x_delta = (-this.xpd.roll() + this.xpd.ap_fd_roll_deg()) * 4f;
+					fd_ver_bar.setLine(x_delta, -160f, x_delta, 160f);
+					g2.draw(fd_ver_bar);
+				}
+
+				g2.setTransform(original_trans);
+
 			}
 
-			if(this.xpd.fd_roll_show(pilot)) {
-				float x_delta = (-this.xpd.roll() + this.xpd.ap_fd_roll_deg()) * 4f;
-				fd_ver_bar.setLine(x_delta, -160f, x_delta, 160f);
-				g2.draw(fd_ver_bar);
-			}
-
-			g2.setTransform(original_trans);
-			
 		}
-			
-		gc.displayImage(rs.img_aircraftNose, 0, 262.366f, 490.525f, g2);
-		
+
+		if (this.xpd.single_cue_fd() == 0) {
+			gc.displayImage(rs.img_aircraftNose, 0, 262.366f, 490.525f, g2);
+		}
+
 		//FPV
 		//scale -16 to 16, negative goes right
-		if(this.xpd.efis_fpv_show(pilot) && !this.xpd.on_gound()) {
+		if(this.xpd.efis_fpv_show(pilot)) { // && !this.xpd.on_gound()) {
 			//float xdelta = this.xpd.fpv_beta() * 10f;
 			//float ydelta = this.xpd.fpv_alpha() * 11f;
-			float xdelta = this.xpd.efis_fpv_horiz(pilot) * 10f;
-			float ydelta = this.xpd.efis_fpv_vert(pilot) * 11f;
+			float xdelta = this.xpd.efis_fpv_horiz(pilot) * 11f;
+			float ydelta = this.xpd.efis_fpv_vert(pilot) * -2;
 
 			g2.scale(gc.scalex, gc.scaley);
 			g2.translate(485 - xdelta, 525 + ydelta);

@@ -53,7 +53,7 @@ public class Systems extends BaseDataClass {
 	private final String THR_LVR2 = "laminar/B738/engine/thr_lvr2";
 	private final String LOWERDU_PAGE = "laminar/B738/systems/lowerDU_page";
 	private final String LOWERDU_PAGE2 = "laminar/B738/systems/lowerDU_page2";
-	private final String WINDSHEER = "laminar/b738/alert/pfd_windshear";
+	private final String WINDSHEAR = "laminar/b738/alert/pfd_windshear";
 	private final String PULLUP = "laminar/b738/alert/pfd_pull_up";
 	private final String XRAAS_MESSAGE = "xraas/ND_alert";
 	private final String REVERSER_DEPLOY = "sim/flightmodel2/engines/thrust_reverser_deploy_ratio";
@@ -62,6 +62,7 @@ public class Systems extends BaseDataClass {
 	private final String FLIGHT_CONTROL = "laminar/B738/effects/flight_control";
 	private final String BRAKE_TEMP = "laminar/B738/effects/brake_temp";
 	private final String GS_ON_PFD = "laminar/B738/gs_on_pfd";
+	private final String SINGLE_CUE_FD = "laminar/B738/single_cue_fd";
 	private final String GPWS_TEST_RUNNING = "laminar/B738/system/gpws_test_running";
 	private final String FF_EICAS = "laminar/B738/ff_eicas";
 	
@@ -92,11 +93,12 @@ public class Systems extends BaseDataClass {
 	public int flight_control = 0;
 	public int brake_temp = 0;
 	public int gs_on_pfd = 0;
+	public int single_cue_fd = 0;
 	public int gpws_test_running = 0;
 	public int ff_eicas = 0;
 	public int lowerdu_page = 0;
 	public int lowerdu_page2 = 0;
-	public int windsheer = 0;
+	public int windshear = 0;
 	public int pullup = 0;
 	public float thr_lvr1 = 0.0f;
 	public float thr_lvr2 = 0.0f;
@@ -198,6 +200,9 @@ public class Systems extends BaseDataClass {
 				case GS_ON_PFD:
 					gs_on_pfd = Integer.parseInt(object.getValue()[0]);
 					break;
+				case SINGLE_CUE_FD:
+					single_cue_fd = Integer.parseInt(object.getValue()[0]);
+					break;
 				case GPWS_TEST_RUNNING:
 					gpws_test_running = Integer.parseInt(object.getValue()[0]);
 					break;
@@ -210,8 +215,8 @@ public class Systems extends BaseDataClass {
 				case LOWERDU_PAGE2:
 					lowerdu_page2 = Integer.parseInt(object.getValue()[0]);
 					break;
-				case WINDSHEER:
-					windsheer = Integer.parseInt(object.getValue()[0]);
+				case WINDSHEAR:
+					windshear = Integer.parseInt(object.getValue()[0]);
 					break;
 				case PULLUP:
 					pullup = Integer.parseInt(object.getValue()[0]);
@@ -367,11 +372,12 @@ public class Systems extends BaseDataClass {
 		iface.includeDataRef(FLIGHT_CONTROL);
 		iface.includeDataRef(BRAKE_TEMP);
 		iface.includeDataRef(GS_ON_PFD);
+		iface.includeDataRef(SINGLE_CUE_FD);
 		iface.includeDataRef(GPWS_TEST_RUNNING);
 		iface.includeDataRef(FF_EICAS);
 		iface.includeDataRef(LOWERDU_PAGE);
 		iface.includeDataRef(LOWERDU_PAGE2);
-		iface.includeDataRef(WINDSHEER);
+		iface.includeDataRef(WINDSHEAR);
 		iface.includeDataRef(PULLUP);
 		iface.includeDataRef(XRAAS_MESSAGE);
 		iface.includeDataRef(REVERSER_DEPLOY, 0.001f);
@@ -404,11 +410,12 @@ public class Systems extends BaseDataClass {
 		iface.observeDataRef(FLIGHT_CONTROL, systems);
 		iface.observeDataRef(BRAKE_TEMP, systems);
 		iface.observeDataRef(GS_ON_PFD, systems);
+		iface.observeDataRef(SINGLE_CUE_FD, systems);
 		iface.observeDataRef(GPWS_TEST_RUNNING, systems);
 		iface.observeDataRef(FF_EICAS, systems);
 		iface.observeDataRef(LOWERDU_PAGE, systems);
 		iface.observeDataRef(LOWERDU_PAGE2, systems);
-		iface.observeDataRef(WINDSHEER, systems);
+		iface.observeDataRef(WINDSHEAR, systems);
 		iface.observeDataRef(PULLUP, systems);
 		iface.observeDataRef(XRAAS_MESSAGE, systems);
 		iface.observeDataRef(REVERSER_DEPLOY, systems);	
@@ -446,11 +453,12 @@ public class Systems extends BaseDataClass {
 		iface.excludeDataRef(FLIGHT_CONTROL);
 		iface.excludeDataRef(BRAKE_TEMP);
 		iface.excludeDataRef(GS_ON_PFD);
+		iface.excludeDataRef(SINGLE_CUE_FD);
 		iface.excludeDataRef(GPWS_TEST_RUNNING);
 		iface.excludeDataRef(FF_EICAS);
 		iface.excludeDataRef(LOWERDU_PAGE);
 		iface.excludeDataRef(LOWERDU_PAGE2);
-		iface.excludeDataRef(WINDSHEER);
+		iface.excludeDataRef(WINDSHEAR);
 		iface.excludeDataRef(PULLUP);
 		iface.excludeDataRef(XRAAS_MESSAGE);
 		iface.excludeDataRef(REVERSER_DEPLOY);
@@ -483,11 +491,12 @@ public class Systems extends BaseDataClass {
 		iface.unObserveDataRef(FLIGHT_CONTROL, systems);
 		iface.unObserveDataRef(BRAKE_TEMP, systems);
 		iface.unObserveDataRef(GS_ON_PFD, systems);
+		iface.unObserveDataRef(SINGLE_CUE_FD, systems);
 		iface.unObserveDataRef(GPWS_TEST_RUNNING, systems);
 		iface.unObserveDataRef(FF_EICAS, systems);
 		iface.unObserveDataRef(LOWERDU_PAGE, systems);
 		iface.unObserveDataRef(LOWERDU_PAGE2, systems);
-		iface.unObserveDataRef(WINDSHEER, systems);
+		iface.unObserveDataRef(WINDSHEAR, systems);
 		iface.unObserveDataRef(PULLUP, systems);
 		iface.unObserveDataRef(XRAAS_MESSAGE, systems);
 		iface.unObserveDataRef(REVERSER_DEPLOY, systems);	

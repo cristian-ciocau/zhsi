@@ -97,7 +97,7 @@ public class AptFileParser {
 
 				apt_file_writer.write("icao;name;elevation;lat;lon;surface_longest;longest\n");
 				rwy_file_writer.write(
-						"icao;lenght;surface;rwy_num1;threshold lat1;threshold lon1;rwy_num2;threshold lat2;threshold lon2\n");
+						"icao;length;surface;rwy_num1;threshold lat1;threshold lon1;rwy_num2;threshold lat2;threshold lon2\n");
 
 				while ((line = apt_file_reader.readLine()) != null) {
 					if (line.length() > 0) {
@@ -168,6 +168,12 @@ public class AptFileParser {
 									arpt_lon = Double.parseDouble(tokens[2]);
 								} else {
 									arpt_lon = 0f;
+								}
+
+							} else if (info_type == 1302 && tokens[1].equals("icao_code")) {
+
+								if (tokens.length > 2) {
+									airport_icao_code = tokens[2];
 								}
 
 							} else if (info_type == 100) {

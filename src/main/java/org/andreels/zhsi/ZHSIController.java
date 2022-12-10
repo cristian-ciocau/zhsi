@@ -185,6 +185,8 @@ public class ZHSIController implements Initializable {
 	private Label lblEgpwsStatusHeading;
 	@FXML
 	private Label lblZHSIversionAbout;
+
+	/*
 	@FXML
 	private ColorPicker inst_gray_color;
 	@FXML
@@ -203,6 +205,7 @@ public class ZHSIController implements Initializable {
 	private ColorPicker inst_horizon_sky_color;
 	@FXML
 	private ColorPicker inst_horizon_ground_color;
+	*/
 
 	@FXML
 	private JFXToggleButton duAlwaysOnTop;
@@ -417,12 +420,21 @@ public class ZHSIController implements Initializable {
 		navDataDir.mkdir();
 
 		long oldAptVersion = Long.parseLong(this.preferences.get_preference(ZHSIPreferences.APTNAV_VERSION));
-		String apt_file_location = preferences.get_preference(ZHSIPreferences.PREF_APTNAV_DIR)
-				+ "/Resources/default scenery/default apt dat/Earth nav data/apt.dat";
+
+		// X-Plane 11
+		String apt_file_location = preferences.get_preference(ZHSIPreferences.PREF_APTNAV_DIR) + "/Custom Scenery/Global Airports/Earth nav data/apt.dat";
+		if (new File(apt_file_location).exists()) {
+			// do nothing
+		} else {
+			// X-Plane 12
+			apt_file_location = preferences.get_preference(ZHSIPreferences.PREF_APTNAV_DIR) + "/Global Scenery/Global Airports/Earth nav data/apt.dat";
+		}
+
 		if (new File("./zhsi_nav_data/apt.dat").exists()) {
 			apt_file_location = "./zhsi_nav_data/apt.dat";
 			logger.info("local apt.dat file found in " + apt_file_location + ", will use that if needed ..");
 		}
+
 		long currentAptVersion = new File(apt_file_location).lastModified();
 		AptFileParser apt = new AptFileParser(apt_file_location);
 
@@ -1527,6 +1539,7 @@ public class ZHSIController implements Initializable {
 		heartbeat.start();
 	}
 
+	/*
 	@FXML
 	public void changeColor() {
 		this.preferences.set_preference(ZHSIPreferences.INST_GRAY_COLOR, this.inst_gray_color.getValue().toString());
@@ -1540,6 +1553,7 @@ public class ZHSIController implements Initializable {
 		this.preferences.set_preference(ZHSIPreferences.INST_CYAN_COLOR, this.inst_cyan_color.getValue().toString());
 
 	}
+	*/
 
 	@FXML
 	public void updateOptions() {

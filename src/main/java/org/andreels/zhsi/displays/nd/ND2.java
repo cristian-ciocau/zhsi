@@ -118,6 +118,8 @@ public class ND2 extends DUBaseClass {
 	private NavigationObject dest;
 	private NavigationObject drawRunway_airport;
 	private NavigationObject drawRunway_runway;
+	private NavigationObject drawVSD_airport;
+	private NavigationObject drawVSD_runway;
 
 	private String map_range;
 	private String max_range_str;
@@ -404,7 +406,11 @@ public class ND2 extends DUBaseClass {
 		float height_scale_max = 0f;
 		float height_scale_pixels = 240f;
 
-		if (terrain_maximum <= 3000 && ref_alt <= 3000) {
+		if (terrain_maximum <= 1500 && ref_alt <= 1500) {
+			height_scale_1_3 = 500;
+			height_scale_2_3 = 1000;
+			height_scale_max = 1500f;
+		} else if (terrain_maximum <= 3000 && ref_alt <= 3000) {
 			height_scale_1_3 = 1000;
 			height_scale_2_3 = 2000;
 			height_scale_max = 3000f;
@@ -516,6 +522,7 @@ public class ND2 extends DUBaseClass {
 		double theta = 0;
 		int opposite = 0;
 		int hypotenuse = 0;
+		int adjacent = 0;
 		
 		if (this.xpd.vs_mode() & alt_plane_y <= y_ground_lvl) {
 			g2.setColor(rs.color_magenta);
@@ -679,16 +686,19 @@ public class ND2 extends DUBaseClass {
 					}
 				}
 				
-				if (constraint_nm * factor_x > width_scale_pixels) {
+				if ((constraint_nm - 10) * factor_x > width_scale_pixels) {
 					break;
 				}
-				
-				if (found_act_wpt && constraint_nm > 0.0 && this.xpd.legs_dist()[i] > 0.0 && (this.xpd.legs_alt_rest1()[i] > 0.0 || this.xpd.legs_alt_rest2()[i] > 0.0)) {
-					
-					constraint_x = (int) (405 + (constraint_nm * (float) (factor_x)));
-					constraint_rest1_y = (int) (y_ground_lvl - (this.xpd.legs_alt_rest1()[i] * factor));
-					constraint_rest2_y = (int) (y_ground_lvl - (this.xpd.legs_alt_rest2()[i] * factor));
-					
+
+				constraint_x = (int) (405 + (constraint_nm * factor_x));
+				constraint_rest1_y = (int) (y_ground_lvl - (this.xpd.legs_alt_rest1()[i] * factor));
+				constraint_rest2_y = (int) (y_ground_lvl - (this.xpd.legs_alt_rest2()[i] * factor));
+
+				if (found_act_wpt && constraint_nm > 0.0 &&
+					this.xpd.legs_dist()[i] > 0.0 &&
+					(this.xpd.legs_alt_rest1()[i] > 0.0 || this.xpd.legs_alt_rest2()[i] > 0.0) &&
+					(constraint_nm * factor_x <= width_scale_pixels)) {
+
 					g2.setFont(rs.glassFont.deriveFont(20f));
 					
 					constraint_string = this.xpd.waypoints()[i];
@@ -779,7 +789,99 @@ public class ND2 extends DUBaseClass {
 						g2.drawPolygon(rest2_x, rest2_y, 3);
 						
 					}
-			
+
+					// draw runway
+					if (this.xpd.legs_alt_rest_type()[i] == 4.0) {
+
+						// calculate runway length in pixels
+						float runway_length_in_nm = (float) (2000 / 1852); // default 2000 feet
+						drawVSD_airport = nor.get_airport(this.xpd.dest_arpt());
+						Airport drawVSD_apt = (Airport)drawVSD_airport;
+						if (drawVSD_airport != null) {
+							drawVSD_runway = nor.get_runway(this.xpd.dest_arpt(), this.xpd.waypoints()[i].replaceAll("RW", ""), drawVSD_apt.lat, drawVSD_apt.lon, false);
+							if (drawVSD_runway != null) {
+								Runway drawVSD_rwy = (Runway)drawVSD_runway;
+								runway_length_in_nm = (float) (drawVSD_rwy.length / 1852);
+								g2.setColor(rs.color_markings);
+								int elev = (int) (y_ground_lvl - (Math.round(drawVSD_apt.elev * factor)));
+								int constraint_x_plus_rwy_len = (int) (constraint_x + (runway_length_in_nm * factor_x));
+								if (constraint_x_plus_rwy_len > 405 + width_scale_pixels) {
+									constraint_x_plus_rwy_len = 405 + width_scale_pixels;
+								}
+								g2.setStroke(rs.stroke4);
+								g2.drawLine(constraint_x, elev, constraint_x_plus_rwy_len, elev);
+							}
+						}
+					}
+				}
+
+				if (found_act_wpt && constraint_nm > 0.0 && this.xpd.legs_dist()[i] > 0.0 && (this.xpd.legs_alt_rest1()[i] > 0.0 || this.xpd.legs_alt_rest2()[i] > 0.0)) {
+
+					// glide path
+					if (this.xpd.legs_alt_rest_type()[i] == 4.0) {
+
+						g2.setColor(rs.color_magenta);
+						g2.setStroke(rs.stroke4);
+
+						// theta_x = factor_x; // pixels for 1 nm
+						// theta_y = Math.tan(Math.toRadians(3)) * 6076.11549 * factor; // pixels for 320 feet ie 3 degree glide path over 1nm
+
+						theta_x = this.xpd.legs_dist()[i] * factor_x;
+						theta_y = (xpd.legs_alt_rest1()[i - 1] - xpd.legs_alt_rest1()[i]) * factor;
+
+						theta = Math.toDegrees(Math.atan(theta_y / theta_x));
+
+						if (constraint_nm > 10) {
+							adjacent = (int) (10 * factor_x);
+						} else {
+							adjacent = (int) (constraint_nm * factor_x);
+						}
+						hypotenuse = (int) (adjacent / Math.cos(Math.toRadians(theta)));
+
+						int constraint_x_less_hypotenuse = constraint_x - hypotenuse;
+
+						g2.rotate(Math.toRadians(theta), constraint_x, constraint_rest1_y);
+						if (constraint_x < 405 + width_scale_pixels) {
+							g2.drawLine(constraint_x, constraint_rest1_y, constraint_x_less_hypotenuse, constraint_rest1_y);
+						} else {
+							g2.drawLine(405 + width_scale_pixels, constraint_rest1_y, constraint_x_less_hypotenuse, constraint_rest1_y);
+						}
+						g2.rotate(Math.toRadians(theta * -1), constraint_x, constraint_rest1_y);
+
+						// 1000 above marker
+
+						g2.setColor(rs.color_markings);
+
+						adjacent = (int) (3 * factor_x);
+						hypotenuse = (int) (adjacent / Math.cos(Math.toRadians(theta)));
+
+						constraint_x_less_hypotenuse = constraint_x - hypotenuse;
+						if (constraint_x_less_hypotenuse >= 405 && constraint_x_less_hypotenuse <= 405 + width_scale_pixels) {
+							g2.rotate(Math.toRadians(theta), constraint_x, constraint_rest1_y);
+							g2.drawLine(constraint_x_less_hypotenuse - 5, constraint_rest1_y - 10, constraint_x_less_hypotenuse, constraint_rest1_y - 5);
+							g2.drawLine(constraint_x_less_hypotenuse, constraint_rest1_y - 5, constraint_x_less_hypotenuse, constraint_rest1_y + 5);
+							g2.drawLine(constraint_x_less_hypotenuse - 5, constraint_rest1_y + 10, constraint_x_less_hypotenuse, constraint_rest1_y + 5);
+							g2.rotate(Math.toRadians(theta * -1), constraint_x, constraint_rest1_y);
+						}
+
+						// 500 above marker
+
+						g2.setColor(Color.YELLOW);
+
+						adjacent = (int) (1.5 * factor_x);
+						hypotenuse = (int) (adjacent / Math.cos(Math.toRadians(theta)));
+
+						constraint_x_less_hypotenuse = constraint_x - hypotenuse;
+						if (constraint_x_less_hypotenuse >= 405 && constraint_x_less_hypotenuse <= 405 + width_scale_pixels) {
+							g2.rotate(Math.toRadians(theta), constraint_x, constraint_rest1_y);
+							g2.drawLine(constraint_x_less_hypotenuse - 5, constraint_rest1_y - 10, constraint_x_less_hypotenuse, constraint_rest1_y - 5);
+							g2.drawLine(constraint_x_less_hypotenuse, constraint_rest1_y - 5, constraint_x_less_hypotenuse, constraint_rest1_y + 5);
+							g2.drawLine(constraint_x_less_hypotenuse - 5, constraint_rest1_y + 10, constraint_x_less_hypotenuse, constraint_rest1_y + 5);
+							g2.rotate(Math.toRadians(theta * -1), constraint_x, constraint_rest1_y);
+						}
+
+					}
+
 				}
 				
 			}
@@ -1107,6 +1209,12 @@ public class ND2 extends DUBaseClass {
 					this.xpd.legs_af_beg(),
 					this.xpd.legs_af_end(),
 					this.xpd.legs_bypass(),
+					this.xpd.legs_offset(),
+					this.xpd.legs_offset_lat(),
+					this.xpd.legs_offset_lon(),
+					this.xpd.legs_offset_act(),
+					this.xpd.legs_offset_start(),
+					this.xpd.legs_offset_end(),
 					this.xpd.legs_rad_lat(),
 					this.xpd.legs_rad_lon(),
 					this.xpd.legs_rad_turn(),
@@ -1149,6 +1257,12 @@ public class ND2 extends DUBaseClass {
 					this.xpd.legs_af_beg(),
 					this.xpd.legs_af_end(),
 					this.xpd.legs_bypass(),
+					this.xpd.mod_legs_offset(),
+					this.xpd.mod_legs_offset_lat(),
+					this.xpd.mod_legs_offset_lon(),
+					this.xpd.legs_offset_act_mod(),
+					this.xpd.legs_offset_start_mod(),
+					this.xpd.legs_offset_end_mod(),
 					this.xpd.mod_legs_rad_lat(),
 					this.xpd.mod_legs_rad_lon(),
 					this.xpd.mod_legs_rad_turn(),
@@ -1189,6 +1303,12 @@ public class ND2 extends DUBaseClass {
 							float[] legs_af_beg,
 							float[] legs_af_end,
 							float[] legs_bypass,
+							float[] legs_offset,
+							float[] legs_offset_lat,
+							float[] legs_offset_lon,
+							int legs_offset_act,
+							int legs_offset_start,
+							int legs_offset_end,
 							float[] legs_rad_lat,
 							float[] legs_rad_lon,
 							float[] legs_rad_turn,
@@ -1276,6 +1396,7 @@ public class ND2 extends DUBaseClass {
 			float dir_seg3_start_x = 0;
 			float dir_seg3_start_y = 0;
 			
+
 			for(int i = 0; i < num_of_wpts - 1; i++) {
 				
 				if ((int)legs_seg1_turn[i] == 2 || (int)legs_seg1_turn[i] == 3) { 
@@ -1477,6 +1598,93 @@ public class ND2 extends DUBaseClass {
 												
 				}
 				
+				// draw lateral offset
+
+				if (legs_offset_act > 1 && i + 1 >= legs_offset_start && i + 1 <= legs_offset_end) {
+
+					//set color and stroke
+					float[] offset_line_dash = {20f * gc.scaling_factor, 20f * gc.scaling_factor};
+					g2.setStroke(new BasicStroke(4f * gc.scaling_factor, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 20.0f * gc.scaling_factor, offset_line_dash, 0.0f));
+
+					if (isActive) {
+						g2.setColor(gc.color_magenta);
+					} else {
+						g2.setColor(gc.color_markings);
+					}
+
+					// start
+
+					if (i + 1 == legs_offset_start) {
+
+						map_projection.setPoint(legs_offset_lat[i + 1], legs_offset_lon[i + 1]);
+						int lateral_offset_x = (int) map_projection.getX();
+						int lateral_offset_y = (int) map_projection.getY();
+
+						float lateral_offset_angle = CoordinateSystem.heading_from_a_to_b(lats[i], lons[i], lats[i + 1], lons[i + 1]);
+						float offset_angle = 0;
+
+						if (legs_offset[i + 1] < 0) // left
+							offset_angle = lateral_offset_angle - 45;
+						if (legs_offset[i + 1] > 0) // right
+							offset_angle = lateral_offset_angle + 45;
+						if (offset_angle < 0)
+							offset_angle = offset_angle + 360;
+						if (offset_angle >= 360)
+							offset_angle = offset_angle - 360;
+
+						float[] offset_latlon = CoordinateSystem.latlon_at_dist_heading(lats[i], lons[i], (float) Math.sqrt((legs_offset[i + 1] * legs_offset[i + 1]) + (legs_offset[i + 1] * legs_offset[i + 1])), offset_angle);
+						map_projection.setPoint(offset_latlon[0], offset_latlon[1]);
+						int offset_x = (int) map_projection.getX();
+						int offset_y = (int) map_projection.getY();
+
+						map_projection.setPoint(lats[i], lons[i]);
+						g2.drawLine((int) map_projection.getX(), (int) map_projection.getY(), offset_x, offset_y);
+						g2.drawLine(offset_x, offset_y, lateral_offset_x, lateral_offset_y);
+
+					} else if (i + 1 == legs_offset_end) {
+
+						// end
+
+						float lateral_offset_angle = CoordinateSystem.heading_from_a_to_b(lats[i], lons[i], lats[i - 1], lons[i - 1]);
+						float offset_angle = 0;
+
+						if (legs_offset[legs_offset_start] < 0) // left
+							offset_angle = lateral_offset_angle + 45;
+						if (legs_offset[legs_offset_start] > 0) // right
+							offset_angle = lateral_offset_angle - 45;
+						if (offset_angle < 0)
+							offset_angle = offset_angle + 360;
+						if (offset_angle >= 360)
+							offset_angle = offset_angle - 360;
+
+						float[] offset_latlon = CoordinateSystem.latlon_at_dist_heading(lats[i], lons[i], (float) Math.sqrt((legs_offset[i] * legs_offset[i]) + (legs_offset[i] * legs_offset[i])), offset_angle);
+						map_projection.setPoint(offset_latlon[0], offset_latlon[1]);
+						int offset_x = (int) map_projection.getX();
+						int offset_y = (int) map_projection.getY();
+
+						map_projection.setPoint(lats[i], lons[i]);
+						g2.drawLine(offset_x, offset_y, (int) map_projection.getX(), (int) map_projection.getY());
+
+						// black out
+						g2.setStroke(this.stroke5);
+						g2.setColor(Color.BLACK);
+						map_projection.setPoint(legs_offset_lat[i], legs_offset_lon[i]);
+						g2.drawLine(offset_x, offset_y, (int) map_projection.getX(), (int) map_projection.getY());
+
+					} else {
+
+					// middle
+
+						map_projection.setPoint(legs_offset_lat[i], legs_offset_lon[i]);
+						int lateral_offset_x = (int) map_projection.getX();
+						int lateral_offset_y = (int) map_projection.getY();
+
+						map_projection.setPoint(legs_offset_lat[i + 1], legs_offset_lon[i + 1]);
+						g2.drawLine(lateral_offset_x, lateral_offset_y, (int) map_projection.getX(), (int) map_projection.getY());
+
+					}
+				}
+
 				// decide what color to draw with
 
 				if(isActive) {
@@ -1776,8 +1984,10 @@ public class ND2 extends DUBaseClass {
 										
 						} else {
 				
-							// non active normal leg							
-							g2.drawLine(x, y, xx, yy);
+							if (legs_offset_act == 0 || legs_offset_act == 7) { // don't draw if doing offset mod
+								// non active normal leg
+								g2.drawLine(x, y, xx, yy);
+							}
 							
 						}
 						

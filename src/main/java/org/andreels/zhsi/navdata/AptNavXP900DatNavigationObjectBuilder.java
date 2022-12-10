@@ -562,7 +562,7 @@ public class AptNavXP900DatNavigationObjectBuilder {
 			String line;
 			String[] tokens;
 			long line_number = 0;
-			boolean version11 = false;
+			boolean version_11_12 = false;
 
 			while ((line = fix_file_reader.readLine()) != null) {
 				if (line.length() > 0) {
@@ -572,13 +572,13 @@ public class AptNavXP900DatNavigationObjectBuilder {
 
 						tokens = line.split("\\s+", 2);
 						logger.info("FIX file format : " + tokens[0]);
-						version11 = tokens[0].equals("1100") || tokens[0].equals("1101");
+						version_11_12 = tokens[0].equals("1100") || tokens[0].equals("1101") || tokens[0].equals("1200");
 
 					} else if ((line_number > 2) && (!line.equals("99"))) {
 						try {
 							tokens = line.split("\\s+", 5);
 							nor.add_nav_object(new Fix(tokens[2], Float.parseFloat(tokens[0]),
-									Float.parseFloat(tokens[1]), version11 && tokens[3].equals("ENRT")));
+									Float.parseFloat(tokens[1]), version_11_12 && tokens[3].equals("ENRT")));
 						} catch (Exception e) {
 							logger.warning("Parse error in " + fix_file.toString() + ":" + line_number + " '" + line
 									+ "' (" + e + ")");
@@ -644,7 +644,7 @@ public class AptNavXP900DatNavigationObjectBuilder {
 			String line;
 			String[] tokens;
 			long line_number = 0;
-			boolean version11 = false;
+			boolean version_11_12 = false;
 			while ((line = awy_file_reader.readLine()) != null) {
 
 				if (line.length() > 0) {
@@ -656,9 +656,9 @@ public class AptNavXP900DatNavigationObjectBuilder {
 
 						tokens = line.split("\\s+", 2);
 						logger.info("AWY file format : " + tokens[0]);
-						version11 = tokens[0].equals("1100");
+						version_11_12 = tokens[0].equals("1100");
 
-					} else if ((!version11) && (line_number > 2) && (!line.equals("99"))) {
+					} else if ((!version_11_12) && (line_number > 2) && (!line.equals("99"))) {
 						// if the AWY file is version 1100, then the FIX file will be version 1100 too,
 						// and we will already know which fixes are terminal or enroute
 						try {
@@ -728,7 +728,7 @@ public class AptNavXP900DatNavigationObjectBuilder {
 			int info_type;
 			String[] tokens;
 			long line_number = 0;
-			boolean version11 = false;
+			boolean version_11_12 = false;
 			// int rowcode_field = 0;
 			int lat_field = 1;
 			int lon_field = 2;
@@ -765,9 +765,9 @@ public class AptNavXP900DatNavigationObjectBuilder {
 						// the file format version and cycle number info is on line 2
 						tokens = line.split("\\s+", 8);
 						logger.info("NAV file format : " + tokens[0]);
-						version11 = tokens[0].equals("1100") || tokens[0].equals("1150");
-						if (version11)
-							logger.info("X-Plane 11");
+						version_11_12 = tokens[0].equals("1100") || tokens[0].equals("1150") || tokens[0].equals("1200");
+						// if (version_11_12)
+						//	logger.info("X-Plane 11");
 						if ((tokens[5].length() > 2) && (tokens[5].charAt(tokens[5].length() - 1) == ',')) {
 							// usually, the cycle number is followed by a comma
 							ZHSIStatus.nav_db_cycle = tokens[5].substring(0, tokens[5].length() - 1);
@@ -779,12 +779,12 @@ public class AptNavXP900DatNavigationObjectBuilder {
 						try {
 
 							// a generic split that works for types 2, 3 and 13
-							tokens = line.split("\\s+", version11 ? 11 : 9);
+							tokens = line.split("\\s+", version_11_12 ? 11 : 9);
 							info_type = Integer.parseInt(tokens[0]);
 
 							if ((info_type == 2) || (info_type == 3) || (info_type == 13)) {
 
-								if (version11) {
+								if (version_11_12) {
 									name_field = 10;
 								} else {
 									name_field = 8;
@@ -813,8 +813,8 @@ public class AptNavXP900DatNavigationObjectBuilder {
 							} else if ((info_type == 4) || (info_type == 5)) {
 
 								// ILS or LOC
-								tokens = line.split("\\s+", version11 ? 12 : 11);
-								if (version11) {
+								tokens = line.split("\\s+", version_11_12 ? 12 : 11);
+								if (version_11_12) {
 									rwy_field = 10;
 									name_field = 11;
 								} else {
@@ -869,8 +869,8 @@ public class AptNavXP900DatNavigationObjectBuilder {
 								// update the ILS (or IGS) with this GS
 								// (we can do this in the same loop, since the file is sorted by info_type; the
 								// ILS will already be stored)
-								tokens = line.split("\\s+", version11 ? 12 : 11);
-								if (version11) {
+								tokens = line.split("\\s+", version_11_12 ? 12 : 11);
+								if (version_11_12) {
 									rwy_field = 10;
 									name_field = 11;
 								} else {

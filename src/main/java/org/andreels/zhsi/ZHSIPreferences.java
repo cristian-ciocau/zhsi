@@ -53,6 +53,9 @@ public class ZHSIPreferences {
 	public static final String PREF_UI_POS_X = "ui.posx";
 	public static final String PREF_UI_POS_Y = "ui.posy";
 
+	public static final String PREF_TERRAIN_WEATHER_BUFFEREDIMAGE_X = "terrain.weather.bufferedimage.x";
+	public static final String PREF_TERRAIN_WEATHER_BUFFEREDIMAGE_Y = "terrain.weather.bufferedimage.y";
+
 	public static final String PREF_CPT_OUTBD_ENABLE = "cptoutbd.enable";
 	public static final String PREF_CPT_INBD_ENABLE = "cptinbd.enable";
 	public static final String PREF_FO_OUTBD_ENABLE = "fooutbd.enable";
@@ -178,6 +181,7 @@ public class ZHSIPreferences {
 	
 	public static final String PREF_SHOW_FPS = "show.fps";
 	
+	/*
 	public static final String INST_HOR_SKY_COLOR = "horizon.sky.color";
 	public static final String INST_HOR_GRD_COLOR = "horizon.ground.color";
 	public static final String INST_GRAY_COLOR = "inst.gray.color";
@@ -187,6 +191,7 @@ public class ZHSIPreferences {
 	public static final String INST_AMBER_COLOR = "inst.amber.color";
 	public static final String INST_LIME_COLOR = "inst.lime.color";
 	public static final String INST_CYAN_COLOR = "inst.cyan.color";
+	*/
 	
 	public static final String WXR_COLOR_0 = "wxr.color.0";
 	public static final String WXR_COLOR_1 = "wxr.color.1";
@@ -200,6 +205,7 @@ public class ZHSIPreferences {
 	public static final String WXR_COLOR_9 = "wxr.color.9";
 	
 	public static final String PREF_RMI_COLOR = "rmi.color";
+	public static final String PREF_IRS_COLOR = "irs.color";
 
 	private static ZHSIPreferences instance;
 	private Properties preferences;
@@ -539,6 +545,16 @@ public class ZHSIPreferences {
 			this.preferences.setProperty(PREF_UI_POS_Y, "none");
 			this.unsaved_changes = true;
 		}
+
+		if (!this.preferences.containsKey(PREF_TERRAIN_WEATHER_BUFFEREDIMAGE_X)) {
+			this.preferences.setProperty(PREF_TERRAIN_WEATHER_BUFFEREDIMAGE_X, "1029");
+			this.unsaved_changes = true;
+		}
+
+		if (!this.preferences.containsKey(PREF_TERRAIN_WEATHER_BUFFEREDIMAGE_Y)) {
+			this.preferences.setProperty(PREF_TERRAIN_WEATHER_BUFFEREDIMAGE_Y, "1011");
+			this.unsaved_changes = true;
+		}
 		
 		if (!this.preferences.containsKey(PREF_FUEL_OVER_UNDER)) {
 			this.preferences.setProperty(PREF_FUEL_OVER_UNDER, "true");
@@ -780,6 +796,7 @@ public class ZHSIPreferences {
 			this.unsaved_changes = true;
 		}
 		
+		/*
 		if (!this.preferences.containsKey(INST_HOR_SKY_COLOR)) {
 			this.preferences.setProperty(INST_HOR_SKY_COLOR, "0x0172DEFF");
 			this.unsaved_changes = true;
@@ -824,6 +841,7 @@ public class ZHSIPreferences {
 			this.preferences.setProperty(INST_CYAN_COLOR, "0x00CCFFFF");
 			this.unsaved_changes = true;
 		}
+		*/
 		
 		if (!this.preferences.containsKey(WXR_COLOR_0)) {
 			this.preferences.setProperty(WXR_COLOR_0, "0x000000");
@@ -880,6 +898,11 @@ public class ZHSIPreferences {
 			this.unsaved_changes = true;
 		}
 		
+		if (!this.preferences.containsKey(PREF_IRS_COLOR)) {
+			this.preferences.setProperty(PREF_IRS_COLOR, "0xFF8000");
+			this.unsaved_changes = true;
+		}
+
 		if (this.unsaved_changes) {
 			store_preferences();
 		}

@@ -46,7 +46,7 @@ public class RenderWeather extends Component {
 	private static final long serialVersionUID = 1L;
 	
 	private LoadResources rs;
-	private ZHSIPreferences preferences;
+	private ZHSIPreferences preferences = ZHSIPreferences.getInstance();
 	private Projection map_projection;
 	private XPData xpd;
 	private WeatherRepository weather_repository;
@@ -63,8 +63,12 @@ public class RenderWeather extends Component {
 	Color colorSliceNotLoaded = new Color(128,128,64,64);
 	Color colorBackGround = new Color(0,64,64,64);
 	
-	public BufferedImage img_weather1 = new BufferedImage(1029, 1011, BufferedImage.TYPE_INT_ARGB);
-	public BufferedImage img_weather2 = new BufferedImage(1029, 1011, BufferedImage.TYPE_INT_ARGB);
+	public BufferedImage img_weather1 = new BufferedImage(Integer.parseInt(this.preferences.get_preference(ZHSIPreferences.PREF_TERRAIN_WEATHER_BUFFEREDIMAGE_X)),
+															Integer.parseInt(this.preferences.get_preference(ZHSIPreferences.PREF_TERRAIN_WEATHER_BUFFEREDIMAGE_Y)),
+															BufferedImage.TYPE_INT_ARGB);
+	public BufferedImage img_weather2 = new BufferedImage(Integer.parseInt(this.preferences.get_preference(ZHSIPreferences.PREF_TERRAIN_WEATHER_BUFFEREDIMAGE_X)),
+															Integer.parseInt(this.preferences.get_preference(ZHSIPreferences.PREF_TERRAIN_WEATHER_BUFFEREDIMAGE_Y)),
+															BufferedImage.TYPE_INT_ARGB);
 	Graphics2D weather1 = img_weather1.createGraphics();
 	Graphics2D weather2 = img_weather2.createGraphics();
 	
@@ -134,14 +138,17 @@ public class RenderWeather extends Component {
 	public void renderWeather(Graphics2D g2, float pixels_per_nm, float max_range, float map_up, float map_center_x, float map_center_y, float scaling_factor, int image, boolean ctr) {
 
 		if(image == 1) {
-			weather1.clearRect(0, 0, 1029, 1011);
+			weather1.clearRect(0, 0, Integer.parseInt(this.preferences.get_preference(ZHSIPreferences.PREF_TERRAIN_WEATHER_BUFFEREDIMAGE_X)),
+										Integer.parseInt(this.preferences.get_preference(ZHSIPreferences.PREF_TERRAIN_WEATHER_BUFFEREDIMAGE_Y)));
 		}else {
-			weather2.clearRect(0, 0, 1029, 1011);
+			weather2.clearRect(0, 0, Integer.parseInt(this.preferences.get_preference(ZHSIPreferences.PREF_TERRAIN_WEATHER_BUFFEREDIMAGE_X)),
+										Integer.parseInt(this.preferences.get_preference(ZHSIPreferences.PREF_TERRAIN_WEATHER_BUFFEREDIMAGE_Y)));
 		}
 		
 		this.center_lat = this.xpd.latitude();
 		this.center_lon = this.xpd.longitude();
-		this.map_projection.setCenter(1029 / 2, 1011 / 2);
+		this.map_projection.setCenter(Integer.parseInt(this.preferences.get_preference(ZHSIPreferences.PREF_TERRAIN_WEATHER_BUFFEREDIMAGE_X)) / 2,
+										Integer.parseInt(this.preferences.get_preference(ZHSIPreferences.PREF_TERRAIN_WEATHER_BUFFEREDIMAGE_Y)) / 2);
 		this.map_projection.setAcf(this.center_lat, this.center_lon);
 		this.map_projection.setScale(pixels_per_nm);
 		

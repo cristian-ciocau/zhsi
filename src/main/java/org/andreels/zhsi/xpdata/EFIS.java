@@ -54,6 +54,7 @@ public class EFIS extends BaseDataClass {
 	private final String[] FPV_SHOW = {"laminar/B738/PFD/capt/fpv_on", "laminar/B738/PFD/fo/fpv_on"};
 	private final String[] FPV_HORIZ = {"laminar/B738/pfd/fpv_horiz", "laminar/B738/pfd/fpv_horiz_fo"};
 	private final String[] FPV_VERT = {"laminar/B738/pfd/fpv_vert", "laminar/B738/pfd/fpv_vert_fo"};
+	// private final String[] FPV_VERT = {"laminar/B738/pfd/fpv_vert2", "laminar/B738/pfd/fpv_vert2"};
 	private final String[] MTRS = {"laminar/B738/PFD/capt/alt_mode_is_meters", "laminar/B738/PFD/fo/alt_mode_is_meters"};
 	private final String[] EXP_MAP = {"laminar/B738/EFIS_control/capt/exp_map", "laminar/B738/EFIS_control/fo/exp_map"};
 	private final String[] VSD_MAP = {"laminar/B738/EFIS_control/capt/vsd_map", "laminar/B738/EFIS_control/fo/vsd_map"};

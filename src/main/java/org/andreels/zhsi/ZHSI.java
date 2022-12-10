@@ -39,7 +39,7 @@ import javafx.stage.Stage;
 
 public class ZHSI extends Application {
 	private static Logger logger = Logger.getLogger("org.andreels.zhsi");
-	private String version = "3.3.9";
+	private String version = "3.4.9";
 	private ZHSIPreferences preferences;
 	
 	@Override

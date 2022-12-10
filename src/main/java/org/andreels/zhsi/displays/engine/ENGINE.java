@@ -131,7 +131,7 @@ public class ENGINE extends DUBaseClass {
 			String tat = "";
 			if (this.xpd.outside_air_temp_c() > 0) {
 				tat = "+" + (int)(Math.round(this.xpd.outside_air_temp_c())) + "c";
-			}else {
+			} else {
 				tat = (int)(Math.round(this.xpd.outside_air_temp_c())) + "c";
 			}
 			
@@ -146,7 +146,19 @@ public class ENGINE extends DUBaseClass {
 			g2.setColor(gc.color_lime);
 			g2.setFont(rs.glassFont.deriveFont(26f));
 			g2.drawString(this.xpd.n1_mode(), 300, 60);
-			g2.setTransform(original_trans);		
+
+			if (this.xpd.assum_temp_show() == 1) {
+				String fst = "";
+				if (this.xpd.fmc_sel_temp() > 0) {
+					fst = "+" + this.xpd.fmc_sel_temp() + "c";
+				} else {
+					fst = this.xpd.fmc_sel_temp() + "c";
+				}
+				g2.setFont(rs.glassFont.deriveFont(30f));
+				g2.drawString(fst, 470, 60);
+			}
+
+			g2.setTransform(original_trans);
 			
 			drawDial(65, 80, eng1n1,eng1n1_fill, this.xpd.eng1_n1(), 210, g2);
 			

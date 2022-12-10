@@ -78,8 +78,6 @@ public class NavigationObjectRepository {
 
 		for (int lat = 0; lat < 181; lat++) {
 			for (int lon = 0; lon < 361; lon++) {
-				// dmes[lat][lon] = new ArrayList();
-
 				vors[lat][lon] = new ArrayList();
 				ndbs[lat][lon] = new ArrayList();
 				fixes[lat][lon] = new ArrayList();
@@ -87,7 +85,6 @@ public class NavigationObjectRepository {
 				rwys[lat][lon] = new ArrayList();
 			}
 		}
-
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -153,15 +150,15 @@ public class NavigationObjectRepository {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void add_freq(float freq, NavigationObject nav_object) {
 
-		// Float freq_key = new Float(freq);
+		Float freq_key = Float.valueOf(freq);
 		ArrayList nos;
-		if (this.frequencies.containsKey(freq)) {
-			nos = (ArrayList) this.frequencies.get(freq);
+		if (this.frequencies.containsKey(freq_key)) {
+			nos = (ArrayList) this.frequencies.get(freq_key);
 		} else {
 			nos = new ArrayList();
 		}
 		nos.add(nav_object);
-		this.frequencies.put(freq, nos);
+		this.frequencies.put(freq_key, nos);
 
 	}
 
@@ -183,7 +180,7 @@ public class NavigationObjectRepository {
 	@SuppressWarnings("rawtypes")
 	private ArrayList get_nav_objects_by_freq(float freq) {
 
-		Float freq_key = new Float(freq);
+		Float freq_key = Float.valueOf(freq);
 		if (this.frequencies.containsKey(freq_key)) {
 			return (ArrayList) this.frequencies.get(freq_key);
 		} else {

@@ -31,7 +31,7 @@ public class DataRefFactory {
     
     private String rawData;
     private String dName;
-    private DataType dType;
+    private Constants.DataType dType;
     private String[] dValue;
     
     public DataRefFactory(String rawData) {
@@ -77,7 +77,7 @@ public class DataRefFactory {
         return dr;
     }
     
-    private DataType getDataType(String rawDataType) {
+    private Constants.DataType getDataType(String rawDataType) {
         
         rawDataType = rawDataType.replace("u", "");
         
